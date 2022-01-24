@@ -43,10 +43,15 @@ class Renderer: NSObject {
         vertexDescriptor.attributes[1].bufferIndex = 0
         vertexDescriptor.attributes[1].offset = float3.size
         
-        // coordinate
-        vertexDescriptor.attributes[2].format = .float2
+        // color
+        vertexDescriptor.attributes[2].format = .float4
         vertexDescriptor.attributes[2].bufferIndex = 0
         vertexDescriptor.attributes[2].offset = float3.size + float3.size
+        
+        // coordinate
+        vertexDescriptor.attributes[3].format = .float2
+        vertexDescriptor.attributes[3].bufferIndex = 0
+        vertexDescriptor.attributes[3].offset = float3.size + float3.size + float4.size
         
         vertexDescriptor.layouts[0].stride = Vertex.stride
         
@@ -54,24 +59,14 @@ class Renderer: NSObject {
     }
     
     func setVertexBuffer() {
-        let vertices = [
-            Vertex(position: float3(0, 1, 0),
-                   normal: float3(),
-                   coordinate: float2()),
-            Vertex(position: float3(-1, -1, 0),
-                   normal: float3(),
-                   coordinate: float2()),
-            Vertex(position: float3(1, -1, 0),
-                   normal: float3(),
-                   coordinate: float2())
-        ]
-        vertexCount = vertices.count
+        let vertices = CubeGeometry.VERTEX_ARRAY()
+        vertexCount = CubeGeometry.VERTEX_COUNT
         vertexBuffer = device.makeBuffer(bytes: vertices,
                                          length: Vertex.stride(vertices.count),
                                          options: [])!
         
-        let indices: [Int16] = [0, 1, 2]
-        indexCount = indices.count
+        let indices = CubeGeometry.TRIANGLE.map { Int16($0) }
+        indexCount = CubeGeometry.TRIANGLE_COUNT * 3
         indexBuffer = device.makeBuffer(bytes: indices,
                                         length: 2 * indexCount,
                                         options: [])
@@ -82,8 +77,8 @@ extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     func draw(in view: MTKView) {
-        guard let rpd = view.currentRenderPassDescriptor
-        , let drawable = view.currentDrawable else { return }
+        guard let rpd = view.currentRenderPassDescriptor,
+              let drawable = view.currentDrawable else { return }
         guard let cb = commandQueue.makeCommandBuffer() else { return }
         cb.label = "Command Buffer"
         
