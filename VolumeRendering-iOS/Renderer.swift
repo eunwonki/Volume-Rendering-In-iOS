@@ -4,6 +4,7 @@ class Renderer: NSObject {
     let device: MTLDevice!
     let commandQueue: MTLCommandQueue!
     let pipelineState: MTLRenderPipelineState!
+    let depthState: MTLDepthStencilState!
     
     var parameter = Parameter()
     var camera = Camera()
@@ -25,6 +26,7 @@ class Renderer: NSObject {
         
         let pipelineDescriptor = MTLRenderPipelineDescriptor()
         pipelineDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
+        pipelineDescriptor.colorAttachments[0].sourceAlphaBlendFactor = .oneMinusSourceAlpha
         pipelineDescriptor.depthAttachmentPixelFormat = view.depthStencilPixelFormat
         pipelineDescriptor.vertexDescriptor = Renderer.vertexDescriptor()
         
@@ -34,13 +36,22 @@ class Renderer: NSObject {
         
         self.pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineDescriptor)
         
+        let depthStencilDescriptor = MTLDepthStencilDescriptor()
+        depthStencilDescriptor.depthCompareFunction = .lessEqual
+        depthStencilDescriptor.isDepthWriteEnabled = true
+        
+        self.depthState = device.makeDepthStencilState(descriptor: depthStencilDescriptor)
+        
         super.init()
         
         setVertexBuffer()
         setTexture()
         
         parameter.viewMatrix = camera.transform
+        parameter.inverseViewMatrix = parameter.viewMatrix.inverse
         parameter.projectionMatrix = camera.projection
+        parameter.inverseProjectionMatrix = camera.projection.inverse
+        parameter.cameraWorldPos = camera.position
     }
     
     static func vertexDescriptor() -> MTLVertexDescriptor {
@@ -146,9 +157,13 @@ class Renderer: NSObject {
                                          axis: X_AXIS)
             parameter.modelMatrix.rotate(angle: Float(diff.width) * delta,
                                          axis: Y_AXIS)
-            
             parameter.viewMatrix = camera.transform
             parameter.projectionMatrix = camera.projection
+            
+            parameter.inverseModelMatrix = parameter.modelMatrix.inverse
+            parameter.inverseViewMatrix = parameter.viewMatrix.inverse
+            parameter.inverseProjectionMatrix = parameter.projectionMatrix.inverse
+            parameter.cameraWorldPos = camera.position
             
             parameter.quality = 128
         }
@@ -172,8 +187,9 @@ extension Renderer: MTKViewDelegate {
         guard let rce = rce,
               let vertexBuffer = vertexBuffer,
               let indexBuffer = indexBuffer else { return }
-        
         rce.setRenderPipelineState(pipelineState)
+        rce.setDepthStencilState(depthState)
+        rce.setCullMode(.front)
         
         guard let parameters = device.makeBuffer(bytes: &parameter,
                                                  length: Parameter.stride,

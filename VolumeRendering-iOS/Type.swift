@@ -39,8 +39,12 @@ struct Vertex: sizeable {
 
 struct Parameter: sizeable {
     var modelMatrix = matrix_identity_float4x4
+    var inverseModelMatrix = matrix_identity_float4x4
     var viewMatrix = matrix_identity_float4x4
+    var inverseViewMatrix = matrix_identity_float4x4
     var projectionMatrix = matrix_identity_float4x4
+    var inverseProjectionMatrix = matrix_identity_float4x4
+    var cameraWorldPos = float3()
     var quality: Int32 = 128
 }
 
