@@ -16,6 +16,8 @@
 		9C8B3E7A279E8BA500599C97 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E79279E8BA500599C97 /* Renderer.swift */; };
 		9C8B3E7C279E8C8100599C97 /* volumerendering.metal in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7B279E8C8100599C97 /* volumerendering.metal */; };
 		9C8B3E7E279E96C500599C97 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7D279E96C500599C97 /* Type.swift */; };
+		9CC39D51279F75570066FC1D /* Gesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC39D50279F75560066FC1D /* Gesture.swift */; };
+		9CC39D53279F76000066FC1D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC39D52279F76000066FC1D /* Math.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		9C8B3E79279E8BA500599C97 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		9C8B3E7B279E8C8100599C97 /* volumerendering.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = volumerendering.metal; sourceTree = "<group>"; };
 		9C8B3E7D279E96C500599C97 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
+		9CC39D50279F75560066FC1D /* Gesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gesture.swift; sourceTree = "<group>"; };
+		9CC39D52279F76000066FC1D /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +72,8 @@
 				66C69D89279EDA1F00D03A93 /* CubeGeometry.swift */,
 				9C8B3E77279E8AC700599C97 /* MetalScene.swift */,
 				9C8B3E79279E8BA500599C97 /* Renderer.swift */,
+				9CC39D52279F76000066FC1D /* Math.swift */,
+				9CC39D50279F75560066FC1D /* Gesture.swift */,
 				9C8B3E7B279E8C8100599C97 /* volumerendering.metal */,
 				9C8B3E6D279E8AA800599C97 /* Assets.xcassets */,
 				9C8B3E6F279E8AA800599C97 /* Preview Content */,
@@ -162,11 +168,13 @@
 			files = (
 				9C8B3E6C279E8AA600599C97 /* ContentView.swift in Sources */,
 				9C8B3E7C279E8C8100599C97 /* volumerendering.metal in Sources */,
+				9CC39D53279F76000066FC1D /* Math.swift in Sources */,
 				9C8B3E78279E8AC700599C97 /* MetalScene.swift in Sources */,
 				9C8B3E7A279E8BA500599C97 /* Renderer.swift in Sources */,
 				9C8B3E6A279E8AA600599C97 /* VolumeRendering_iOSApp.swift in Sources */,
 				9C8B3E7E279E96C500599C97 /* Type.swift in Sources */,
 				66C69D8A279EDA1F00D03A93 /* CubeGeometry.swift in Sources */,
+				9CC39D51279F75570066FC1D /* Gesture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

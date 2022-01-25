@@ -36,10 +36,11 @@ struct Vertex: sizeable {
     var coordinate: float2
 }
 
-struct SceneConstants: sizeable {
+struct Parameter: sizeable {
     var modelMatrix = matrix_identity_float4x4
-    var viewMatrix = matrix_identity_float4x4
-    var projectionMatrix = matrix_identity_float4x4
+    //var viewMatrix = matrix_identity_float4x4
+    //var projectionMatrix = matrix_identity_float4x4
+    var quality: Int32 = 128
 }
 
 struct Material: sizeable {

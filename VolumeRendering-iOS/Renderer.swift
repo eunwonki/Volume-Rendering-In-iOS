@@ -5,6 +5,8 @@ class Renderer: NSObject {
     let commandQueue: MTLCommandQueue!
     let pipelineState: MTLRenderPipelineState!
     
+    var parameter = Parameter()
+    
     var vertexBuffer: MTLBuffer?
     var vertexCount = 0
     var indexBuffer: MTLBuffer?
@@ -71,12 +73,26 @@ class Renderer: NSObject {
                                         length: 2 * indexCount,
                                         options: [])
     }
+    
+    func updateModelViewMatrix() {
+        if Gesture.isDragging {
+            let diff = Gesture.currentDragDiff
+            let delta: Float = 0.001
+            
+            parameter.modelMatrix.rotate(angle: Float(diff.height) * delta,
+                                         axis: X_AXIS)
+            parameter.modelMatrix.rotate(angle: Float(diff.width) * delta,
+                                         axis: Y_AXIS)
+        }
+    }
 }
 
 extension Renderer: MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     func draw(in view: MTKView) {
+        updateModelViewMatrix()
+        
         guard let rpd = view.currentRenderPassDescriptor,
               let drawable = view.currentDrawable else { return }
         guard let cb = commandQueue.makeCommandBuffer() else { return }
@@ -90,8 +106,17 @@ extension Renderer: MTKViewDelegate {
               let indexBuffer = indexBuffer else { return }
         
         rce.setRenderPipelineState(pipelineState)
+        
+        guard let parameters = device.makeBuffer(bytes: &parameter,
+                                                 length: Parameter.stride,
+                                                 options: [])
+        else {
+            return
+        }
 
         rce.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+        rce.setVertexBuffer(parameters, offset: 0, index: 1)
+        
         rce.drawIndexedPrimitives(type: .triangle,
                                   indexCount: indexCount,
                                   indexType: .uint16,

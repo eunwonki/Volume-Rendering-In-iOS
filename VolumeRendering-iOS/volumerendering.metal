@@ -31,8 +31,7 @@ vertex VertexOut vertex_func(
     constant Parameter& param [[ buffer(1) ]])
 {
     VertexOut out;
-    out.position = float4(in.position, 1);
-    // out.position = (mvp * float4(in.position, 1)).xyz;
+    out.position = param.modelMatrix * float4(in.position, 1);
     out.texcoord = in.texcoord;
     // out.normal = in.normal // converto world normal
     out.color = in.color;
