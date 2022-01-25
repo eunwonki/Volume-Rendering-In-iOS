@@ -10,6 +10,8 @@ struct VertexIn {
 
 struct Parameter {
     float4x4 modelMatrix;
+    float4x4 viewMatrix;
+    float4x4 projectionMatrix;
     int quality;
 };
 
@@ -31,9 +33,12 @@ vertex VertexOut vertex_func(
     constant Parameter& param [[ buffer(1) ]])
 {
     VertexOut out;
-    out.position = param.modelMatrix * float4(in.position, 1);
+    float4x4 mvpMatrix = param.projectionMatrix
+    * param.viewMatrix
+    * param.modelMatrix;
+    out.position = mvpMatrix * float4(in.position, 1);
+    out.vertexLocal = in.position;
     out.texcoord = in.texcoord;
-    // out.normal = in.normal // converto world normal
     out.color = in.color;
     return out;
 }
@@ -47,9 +52,35 @@ fragment FragmentOut fragment_func(
     texture2d<float, access::sample> noise [[texture(3)]]
 )
 {
+    constexpr sampler sampler(coord::normalized,
+                              filter::linear,
+                              address::clamp_to_edge);
     FragmentOut out;
-    out.color =  in.color;
-    out.depth = 1.0;
+    
+    const float boxDiagonal = 1.732;
+    const float stepSize = boxDiagonal / param.quality;
+
+    float3 rayStartPos = in.vertexLocal + float3(0.5, 0.5, 0.5);
+    float3 rayDir = float3(0, 0, 0);
+
+    float maxDensity = 0;
+    for (int iStep = 0; iStep < param.quality; iStep++)
+    {
+        const float t = iStep * stepSize;
+        const float3 currPos = rayStartPos + rayDir * t;
+
+//        if (currPos.x < 0.0f || currPos.x > 1.0f ||
+//            currPos.y < 0.0f || currPos.y > 1.0f ||
+//            currPos.z < 0.0f || currPos.z > 1.0f)
+//            break;
+
+        float density = volume.sample(sampler, currPos).r;
+        if (density > 0.2)
+            maxDensity = max(maxDensity, density);
+    }
+    
+    out.color = float4(maxDensity);
+    //out.depth = in.vertexLocal; local to depth
     return out;
 }
 

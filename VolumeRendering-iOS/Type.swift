@@ -23,6 +23,7 @@ extension sizeable {
     }
 }
 
+extension UInt8: sizeable {}
 extension Int32: sizeable {}
 extension Float: sizeable {}
 extension float2: sizeable {}
@@ -38,8 +39,8 @@ struct Vertex: sizeable {
 
 struct Parameter: sizeable {
     var modelMatrix = matrix_identity_float4x4
-    //var viewMatrix = matrix_identity_float4x4
-    //var projectionMatrix = matrix_identity_float4x4
+    var viewMatrix = matrix_identity_float4x4
+    var projectionMatrix = matrix_identity_float4x4
     var quality: Int32 = 128
 }
 

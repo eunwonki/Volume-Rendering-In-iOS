@@ -16,10 +16,10 @@ struct MetalScene: UIViewRepresentable {
     
     func makeCoordinator() -> Coordinator {
         mtkView.device = MTLCreateSystemDefaultDevice()
-        mtkView.clearColor = .init(red: 0.7, green: 0.7, blue: 0.7, alpha: 0.7)
+        mtkView.clearColor = .init(red: 0.5, green: 0.0, blue: 0.5, alpha: 0.5)
         mtkView.colorPixelFormat = .bgra8Unorm
         mtkView.depthStencilPixelFormat = .depth32Float
-        mtkView.backgroundColor = .lightGray
+        mtkView.backgroundColor = .clear
         return Coordinator(mtkView)
     }
     
