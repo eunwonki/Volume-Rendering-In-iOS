@@ -90,16 +90,15 @@ vertex VertexOut vertex_func(
 
 fragment FragmentOut fragment_func(
     VertexOut in [[ stage_in ]],
-    constant SCNSceneBuffer& scn_frame [[buffer(0)]],
+    constant SCNSceneBuffer& scn_frame [[ buffer(0) ]],
     constant NodeBuffer& scn_node [[ buffer(1) ]],
+    constant int& quality [[ buffer(2) ]],
     texture3d<float, access::sample> volume [[ texture(0) ]]
 //    texture3d<float, access::sample> gradient [[ texture(1) ]],
 //    texture2d<float, access::sample> transferColor [[ texture(2) ]],
 //    texture2d<float, access::sample> noise [[texture(3)]]
 )
 {
-    int quality = 512;
-    
     constexpr sampler sampler(coord::normalized,
                               filter::linear,
                               address::clamp_to_edge);
@@ -118,9 +117,10 @@ fragment FragmentOut fragment_func(
         const float t = iStep * stepSize;
         const float3 currPos = rayStartPos + rayDir * t;
 
-        if (currPos.x < 0.0f || currPos.x > 1.0f ||
-            currPos.y < 0.0f || currPos.y > 1.0f ||
-            currPos.z < 0.0f || currPos.z > 1.0f)
+        // compare number should have little more bounds, because of cutting issue
+        if (currPos.x < -1e-6 || currPos.x > 1+1e-6 ||
+            currPos.y < -1e-6 || currPos.y > 1+1e-6 ||
+            currPos.z < -1e-6 || currPos.z > 1+1e-6)
             break;
 
         float density = volume.sample(sampler, currPos).r;
@@ -128,7 +128,7 @@ fragment FragmentOut fragment_func(
             maxDensity = max(maxDensity, density);
     }
     
-    if (maxDensity ==  0) discard_fragment();
+    if (maxDensity <  0.0001) discard_fragment();
     
     out.color = float4(maxDensity);
     out.depth = localToDepth(in.localPosition, scn_node, scn_frame);

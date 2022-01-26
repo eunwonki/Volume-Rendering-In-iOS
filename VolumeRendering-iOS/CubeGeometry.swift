@@ -135,20 +135,3 @@ class CubeGeometry {
         return vertices
     }
 }
-
-class VolumeCube: SCNGeometry {
-    var texture: MTLTexture?
-    
-    init(view: SCNView)
-    {
-        super.init()
-        
-        let program = SCNProgram()
-        program.vertexFunctionName = "vertex_func"
-        program.fragmentFunctionName = "fragment_func"
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}

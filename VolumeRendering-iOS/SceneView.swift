@@ -9,6 +9,7 @@ struct SceneView: UIViewRepresentable {
     func makeUIView(context: Context) -> SCNView {
         let scene = SCNScene()
         let root = scene.rootNode
+        let device = scnView.device!
         
         scnView.allowsCameraControl = true
         scnView.autoenablesDefaultLighting = true
@@ -18,15 +19,7 @@ struct SceneView: UIViewRepresentable {
         let cameraController = scnView.defaultCameraController
         
         let box = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
-        let program = SCNProgram()
-        program.vertexFunctionName = "vertex_func"
-        program.fragmentFunctionName = "fragment_func"
-        box.program = program
-        
-        let texture = VolumeTexture.get(device: scnView.device!)!
-        let property = SCNMaterialProperty(contents: texture)
-        box.setValue(property, forKey: "volume")
-        
+        box.materials = [VolumeCubeMaterial(device: device)]
         let node = SCNNode(geometry: box)
         node.position = SCNVector3Make(0, 0, 2)
         root.addChildNode(node)

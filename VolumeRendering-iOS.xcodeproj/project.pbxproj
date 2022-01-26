@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		66499F4C27A1887200F20AAB /* VolumeCubeMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */; };
 		66C69D8A279EDA1F00D03A93 /* CubeGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C69D89279EDA1F00D03A93 /* CubeGeometry.swift */; };
 		9C21FBCD27A0D860004CE254 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21FBCC27A0D860004CE254 /* SceneView.swift */; };
 		9C21FBCF27A0E904004CE254 /* VolumeTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */; };
@@ -183,6 +184,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeCubeMaterial.swift; sourceTree = "<group>"; };
 		66C69D89279EDA1F00D03A93 /* CubeGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CubeGeometry.swift; sourceTree = "<group>"; };
 		9C21FBCC27A0D860004CE254 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
 		9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VolumeTexture.swift; path = "VolumeRendering-iOS/VolumeTexture.swift"; sourceTree = SOURCE_ROOT; };
@@ -391,6 +393,7 @@
 			children = (
 				9CC39D4F279F6E8F0066FC1D /* Data */,
 				9C21FBCC27A0D860004CE254 /* SceneView.swift */,
+				66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */,
 				66C69D89279EDA1F00D03A93 /* CubeGeometry.swift */,
 				9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */,
 				9C8B3E7B279E8C8100599C97 /* volumerendering.metal */,
@@ -818,6 +821,7 @@
 				9CC39D53279F76000066FC1D /* Math(Deprecated).swift in Sources */,
 				9C8B3E78279E8AC700599C97 /* MetalScene(Deprecated).swift in Sources */,
 				9C8B3E7A279E8BA500599C97 /* Renderer(Deprecated).swift in Sources */,
+				66499F4C27A1887200F20AAB /* VolumeCubeMaterial.swift in Sources */,
 				9C8B3E6A279E8AA600599C97 /* VolumeRendering_iOSApp.swift in Sources */,
 				9C21FBCF27A0E904004CE254 /* VolumeTexture.swift in Sources */,
 				9C21FBCD27A0D860004CE254 /* SceneView.swift in Sources */,
