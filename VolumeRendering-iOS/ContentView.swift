@@ -1,19 +1,12 @@
-import SwiftUI
 import MetalKit
+import SceneKit
+import SwiftUI
 
 struct ContentView: View {
-    let drag = DragGesture()
-        .onChanged {
-            Gesture.OnDragging(start: $0.startLocation,
-                               translation: $0.translation)
-        }
-        .onEnded { _ in
-            Gesture.OnDragEnd()
-        }
-    
     var body: some View {
-        MetalScene(mtkView: MTKView())
-            .gesture(drag)
+        ZStack {
+            SceneView(scnView: SCNView())
+        }
     }
 }
 

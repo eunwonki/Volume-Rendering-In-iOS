@@ -1,4 +1,5 @@
 import MetalKit
+import SceneKit
 
 class Renderer: NSObject {
     let device: MTLDevice!
@@ -7,7 +8,6 @@ class Renderer: NSObject {
     let depthState: MTLDepthStencilState!
     
     var parameter = Parameter()
-    var camera = Camera()
     
     var vertexBuffer: MTLBuffer?
     var vertexCount = 0
@@ -45,13 +45,21 @@ class Renderer: NSObject {
         super.init()
         
         setVertexBuffer()
-        setTexture()
+        texture = VolumeTexture.get(device: device)
         
-        parameter.viewMatrix = camera.transform
+        let viewPort = CGSize(width: 1194, height: 834)
+//        parameter.viewMatrix =
+//            float4x4(cameraController?.pointOfView?.transform
+//                ?? SCNMatrix4Identity)
         parameter.inverseViewMatrix = parameter.viewMatrix.inverse
-        parameter.projectionMatrix = camera.projection
-        parameter.inverseProjectionMatrix = camera.projection.inverse
-        parameter.cameraWorldPos = camera.position
+//        parameter.projectionMatrix =
+//            float4x4(cameraController?.pointOfView?.camera?.projectionTransform(withViewportSize: viewPort)
+//                    ?? SCNMatrix4Identity)
+        parameter.inverseProjectionMatrix = parameter.projectionMatrix.inverse
+//        parameter.cameraWorldPos =
+//            float3(cameraController?.pointOfView?.position ??
+//            SCNVector3())
+        parameter.quality = 128
     }
     
     static func vertexDescriptor() -> MTLVertexDescriptor {
@@ -96,77 +104,21 @@ class Renderer: NSObject {
                                         options: [])
     }
     
-    func setTexture() {
-        let width = 512
-        let height = 512
-        let depth = 161
-        let channel = 1
-        
-        let values = UnsafeMutablePointer<Float>
-            .allocate(capacity: width * height * depth * channel)
-        
-        for i in 0 ..< depth {
-            let ptr = values.advanced(by: width * height * channel * i)
-            let name = String(format: "%04d", arguments: [i])
-            let path = Bundle.main.path(forResource: name, ofType: "png")!
-            let image = UIImage(contentsOfFile: path)!.cgImage!
-            let bitmapInfo =
-                CGImageAlphaInfo.none.rawValue
-                    | CGBitmapInfo.byteOrder32Little.rawValue
-                    | CGBitmapInfo.floatComponents.rawValue
-            let colorSpace = CGColorSpaceCreateDeviceGray()
-            let context =
-                CGContext(data: ptr,
-                          width: width,
-                          height: height,
-                          bitsPerComponent: 32,
-                          bytesPerRow: width * 4,
-                          space: colorSpace,
-                          bitmapInfo: bitmapInfo)!
-            
-            context.draw(image, in: CGRect(x: 0, y: 0,
-                                           width: width, height: height))
-        }
-        
-        let textureDescriptor = MTLTextureDescriptor()
-        textureDescriptor.textureType = .type3D
-        textureDescriptor.pixelFormat = .r32Float
-        textureDescriptor.width = width
-        textureDescriptor.height = height
-        textureDescriptor.depth = depth
-        textureDescriptor.usage = .shaderRead
-        
-        texture = device.makeTexture(descriptor: textureDescriptor)!
-        texture!.replace(region: MTLRegionMake3D(0, 0, 0,
-                                                 width, height, depth),
-                         mipmapLevel: 0,
-                         slice: 0,
-                         withBytes: values,
-                         bytesPerRow: Float.size * channel * width,
-                         bytesPerImage: width * height * Float.size * channel)
-        
-         values.deallocate()
-    }
-    
+    var isSet = false;
     func updateModelViewMatrix() {
-        if Gesture.isDragging {
-            let diff = Gesture.currentDragDiff
-            let delta: Float = 0.0001
-            
-            parameter.modelMatrix.rotate(angle: Float(diff.height) * delta,
-                                         axis: X_AXIS)
-            parameter.modelMatrix.rotate(angle: Float(diff.width) * delta,
-                                         axis: Y_AXIS)
-            parameter.viewMatrix = camera.transform
-            parameter.projectionMatrix = camera.projection
-            
-            parameter.inverseModelMatrix = parameter.modelMatrix.inverse
-            parameter.inverseViewMatrix = parameter.viewMatrix.inverse
-            parameter.inverseProjectionMatrix = parameter.projectionMatrix.inverse
-            parameter.cameraWorldPos = camera.position
-            
-            parameter.quality = 128
-        }
+        let viewPort = CGSize(width: 1194, height: 834)
+//        parameter.viewMatrix =
+//            float4x4(cameraController?.pointOfView?.transform
+//                     ?? SCNMatrix4Identity)
+        parameter.inverseViewMatrix = parameter.viewMatrix.inverse
+//        parameter.projectionMatrix =
+//            float4x4(cameraController?.pointOfView?.camera?.projectionTransform(withViewportSize: viewPort)
+//                    ?? SCNMatrix4Identity)
+        parameter.inverseProjectionMatrix = parameter.projectionMatrix.inverse
+//        parameter.cameraWorldPos =
+//            float3(cameraController?.pointOfView?.position ??
+//            SCNVector3())
+        parameter.quality = 128
     }
 }
 

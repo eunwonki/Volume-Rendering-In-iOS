@@ -1,30 +1,74 @@
 #include <metal_stdlib>
 using namespace metal;
+#include <SceneKit/scn_metal>
 
-struct VertexIn {
-    float3 position [[ attribute(0) ]];
-    float3 normal [[ attribute(1) ]];
-    float4 color [[ attribute(2) ]];
-    float2 texcoord [[ attribute(3) ]];
+// https://developer.apple.com/documentation/scenekit/scnprogram
+//struct SCNSceneBuffer {
+//    float4x4    viewTransform;
+//    float4x4    inverseViewTransform; // view space to world space
+//    float4x4    projectionTransform;
+//    float4x4    viewProjectionTransform;
+//    float4x4    viewToCubeTransform; // view space to cube texture space (right-handed, y-axis-up)
+//    float4      ambientLightingColor;
+//    float4      fogColor;
+//    float3      fogParameters; // x: -1/(end-start) y: 1-start*x z: exponent
+//    float       time;     // system time elapsed since first render with this shader
+//    float       sinTime;  // precalculated sin(time)
+//    float       cosTime;  // precalculated cos(time)
+//    float       random01; // random value between 0.0 and 1.0
+//};
+
+struct NodeBuffer {
+    float4x4 modelTransform;
+    float4x4 inverseModelTransform;
+    float4x4 modelViewTransform;
+    float4x4 inverseModelViewTransform;
+    float4x4 normalTransform;
+    float4x4 modelViewProjectionTransform;
+    float4x4 inverseModelViewProjectionTransform;
+    float2x3 boundingBox;
+    float2x3 worldBoundingBox;
 };
 
-struct Parameter {
-    float4x4 modelMatrix;
-    float4x4 inverseModelMatrix;
-    float4x4 viewMatrix;
-    float4x4 inverseViewMatrix;
-    float4x4 projectionMatrix;
-    float4x4 inverseProjectionMatrix;
-    float3 cameraWorldPos;
-    int quality;
+// https://github.com/TwoTailsGames/Unity-Built-in-Shaders
+float3 ObjSpaceViewDir(float4 v, NodeBuffer node, SCNSceneBuffer scene)
+{
+    float4 worldCameraPos = scene.viewTransform.columns[3];
+    float3 objSpaceCameraPos = (scene.inverseViewProjectionTransform
+                                * worldCameraPos).xyz;
+    return objSpaceCameraPos - v.xyz;
+}
+
+float4 UnityObjectToClipPos(float3 inPos, NodeBuffer node, SCNSceneBuffer scene)
+{
+    float3 worldPos = (node.modelTransform * float4(inPos, 1)).xyz;
+    float4 clipPos = scene.viewProjectionTransform * float4(worldPos, 1);
+    return clipPos;
+}
+
+float3 UnityObjectToWorldNormal(float3 norm, NodeBuffer node)
+{
+    float3 worldNormal = (node.modelTransform * float4(norm, 1)).xyz;
+    return normalize(worldNormal);
+}
+
+float localToDepth(float3 localPos, NodeBuffer node, SCNSceneBuffer scene)
+{
+    float4 clipPos = UnityObjectToClipPos(localPos, node, scene);
+    return clipPos.z / clipPos.w;
+}
+
+struct VertexIn {
+    float3 position  [[attribute(SCNVertexSemanticPosition)]];
+    float3 normal   [[ attribute(SCNVertexSemanticNormal) ]];
+    float4 color [[ attribute(SCNVertexSemanticColor) ]];
+    float2 uv [[ attribute(SCNVertexSemanticTexcoord0) ]];
 };
 
 struct VertexOut {
     float4 position [[position]];
-    float2 texcoord;
-    float3 vertexLocal;
+    float3 localPosition;
     float3 normal;
-    float4 color;
 };
 
 struct FragmentOut {
@@ -32,72 +76,44 @@ struct FragmentOut {
     float depth [[depth(any)]];
 };
 
-// https://github.com/TwoTailsGames/Unity-Built-in-Shaders
-float3 ObjSpaceViewDir(float4 v, Parameter param)
-{
-    float3 worldCameraPos = param.cameraWorldPos;
-    float3 objSpaceCameraPos = (param.modelMatrix
-                                * float4(worldCameraPos, 1)).xyz;
-    return objSpaceCameraPos - v.xyz;
-}
-
-float4 UnityObjectToClipPos(float3 inPos, Parameter param)
-{
-    float4 clipPos;
-    float3 posWorld = (param.inverseModelMatrix * float4(inPos, 1)).xyz;
-    float4x4 viewProjection = param.projectionMatrix * param.viewMatrix;
-    clipPos = viewProjection * float4(posWorld, 1);
-    return clipPos;
-}
-
-float3 UnityObjectToWorldNormal(float3 norm, Parameter param)
-{
-    float3 worldNormal = (param.inverseModelMatrix * float4(norm, 1)).xyz;
-    return normalize(worldNormal);
-}
-
-float localToDepth(float3 localPos, Parameter param)
-{
-    float4 clipPos = UnityObjectToClipPos(localPos, param);
-    return clipPos.z / clipPos.w;
-}
-
 vertex VertexOut vertex_func(
     VertexIn in [[ stage_in ]],
-    constant Parameter& param [[ buffer(1) ]])
+    constant SCNSceneBuffer& scn_frame [[ buffer(0) ]],
+    constant NodeBuffer& scn_node [[ buffer(1) ]])
 {
     VertexOut out;
-    out.position = UnityObjectToClipPos(in.position, param);
-    out.normal = UnityObjectToWorldNormal(in.normal, param);
-    out.vertexLocal = in.position;
-    out.texcoord = in.texcoord;
-    out.color = in.color;
+    out.position = UnityObjectToClipPos(in.position, scn_node, scn_frame);
+    out.normal = UnityObjectToWorldNormal(in.normal, scn_node);
+    out.localPosition = in.position;
     return out;
 }
 
 fragment FragmentOut fragment_func(
     VertexOut in [[ stage_in ]],
-    constant Parameter& param [[ buffer(1) ]],
-    texture3d<float, access::sample> volume [[ texture(0) ]],
-    texture3d<float, access::sample> gradient [[ texture(1) ]],
-    texture2d<float, access::sample> transferColor [[ texture(2) ]],
-    texture2d<float, access::sample> noise [[texture(3)]]
+    constant SCNSceneBuffer& scn_frame [[buffer(0)]],
+    constant NodeBuffer& scn_node [[ buffer(1) ]],
+    texture3d<float, access::sample> volume [[ texture(0) ]]
+//    texture3d<float, access::sample> gradient [[ texture(1) ]],
+//    texture2d<float, access::sample> transferColor [[ texture(2) ]],
+//    texture2d<float, access::sample> noise [[texture(3)]]
 )
 {
+    int quality = 512;
+    
     constexpr sampler sampler(coord::normalized,
                               filter::linear,
                               address::clamp_to_edge);
     FragmentOut out;
     
     const float boxDiagonal = 1.732;
-    const float stepSize = boxDiagonal / param.quality;
+    const float stepSize = boxDiagonal / quality;
 
-    float3 rayStartPos = in.vertexLocal + float3(0.5, 0.5, 0.5);
-    float3 rayDir = ObjSpaceViewDir(float4(in.vertexLocal, 0), param);
+    float3 rayStartPos = in.localPosition + float3(0.5, 0.5, 0.5);
+    float3 rayDir = ObjSpaceViewDir(float4(in.localPosition, 1), scn_node, scn_frame);
     rayDir = normalize(rayDir);
 
     float maxDensity = 0;
-    for (int iStep = 0; iStep < param.quality; iStep++)
+    for (int iStep = 0; iStep < quality; iStep++)
     {
         const float t = iStep * stepSize;
         const float3 currPos = rayStartPos + rayDir * t;
@@ -115,7 +131,7 @@ fragment FragmentOut fragment_func(
     if (maxDensity ==  0) discard_fragment();
     
     out.color = float4(maxDensity);
-    out.depth = localToDepth(in.vertexLocal, param);
+    out.depth = localToDepth(in.localPosition, scn_node, scn_frame);
     return out;
 }
 
