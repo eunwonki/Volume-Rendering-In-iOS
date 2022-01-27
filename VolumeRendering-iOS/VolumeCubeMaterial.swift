@@ -1,7 +1,7 @@
 import SceneKit
 
 class VolumeCubeMaterial: SCNMaterial {
-    let quality = 256
+    let quality = 128
     
     init(device: MTLDevice) {
         super.init()

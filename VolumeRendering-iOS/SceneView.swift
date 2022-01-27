@@ -21,20 +21,21 @@ struct SceneView: UIViewRepresentable {
         let box = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
         box.materials = [VolumeCubeMaterial(device: device)]
         let node = SCNNode(geometry: box)
-        node.position = SCNVector3Make(0, 0, 2)
+        node.scale = SCNVector3(float3(0.431, 0.431, 0.322))
+        node.position = SCNVector3Make(0, 0, 0.5)
         root.addChildNode(node)
         
-        let node2 = SCNNode(geometry: SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0))
+        let node2 = SCNNode(geometry: SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0))
         node2.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
-        node2.position = SCNVector3Make(2, 0, 2)
+        node2.position = SCNVector3Make(0.5, 0, 0.5)
         root.addChildNode(node2)
         
-        let node3 = SCNNode(geometry: SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0))
+        let node3 = SCNNode(geometry: SCNSphere(radius: 0.2))
         node3.geometry?.firstMaterial?.diffuse.contents = UIColor.green
-        node3.position = SCNVector3Make(-2, 0, 2)
+        node3.position = SCNVector3Make(-0.5, 0, 0.5)
         root.addChildNode(node3)
         
-        cameraController.target = SCNVector3Make(0, 0, 2)
+        cameraController.target = node.boundingSphere.center
         
         scnView.scene = scene
         

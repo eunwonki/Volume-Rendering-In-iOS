@@ -18,7 +18,7 @@
 		9C8B3E78279E8AC700599C97 /* MetalScene(Deprecated).swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E77279E8AC700599C97 /* MetalScene(Deprecated).swift */; };
 		9C8B3E7A279E8BA500599C97 /* Renderer(Deprecated).swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E79279E8BA500599C97 /* Renderer(Deprecated).swift */; };
 		9C8B3E7C279E8C8100599C97 /* volumerendering.metal in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7B279E8C8100599C97 /* volumerendering.metal */; };
-		9C8B3E7E279E96C500599C97 /* Type(Deprecated).swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7D279E96C500599C97 /* Type(Deprecated).swift */; };
+		9C8B3E7E279E96C500599C97 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7D279E96C500599C97 /* Type.swift */; };
 		9CC39D53279F76000066FC1D /* Math(Deprecated).swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC39D52279F76000066FC1D /* Math(Deprecated).swift */; };
 		9CC39DFA279F80810066FC1D /* 0000.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CC39DE5279F80690066FC1D /* 0000.png */; };
 		9CC39DFB279F80810066FC1D /* 0001.png in Resources */ = {isa = PBXBuildFile; fileRef = 9CC39DB9279F80670066FC1D /* 0001.png */; };
@@ -196,7 +196,7 @@
 		9C8B3E77279E8AC700599C97 /* MetalScene(Deprecated).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MetalScene(Deprecated).swift"; sourceTree = "<group>"; };
 		9C8B3E79279E8BA500599C97 /* Renderer(Deprecated).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Renderer(Deprecated).swift"; sourceTree = "<group>"; };
 		9C8B3E7B279E8C8100599C97 /* volumerendering.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = volumerendering.metal; sourceTree = "<group>"; };
-		9C8B3E7D279E96C500599C97 /* Type(Deprecated).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Type(Deprecated).swift"; sourceTree = "<group>"; };
+		9C8B3E7D279E96C500599C97 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		9CC39D52279F76000066FC1D /* Math(Deprecated).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Math(Deprecated).swift"; sourceTree = "<group>"; };
 		9CC39D59279F80630066FC1D /* 0018.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 0018.png; sourceTree = "<group>"; };
 		9CC39D5A279F80630066FC1D /* 0014.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 0014.png; sourceTree = "<group>"; };
@@ -394,10 +394,10 @@
 				9CC39D4F279F6E8F0066FC1D /* Data */,
 				9C21FBCC27A0D860004CE254 /* SceneView.swift */,
 				66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */,
-				66C69D89279EDA1F00D03A93 /* CubeGeometry.swift */,
 				9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */,
+				9C8B3E7D279E96C500599C97 /* Type.swift */,
+				66C69D89279EDA1F00D03A93 /* CubeGeometry.swift */,
 				9C8B3E7B279E8C8100599C97 /* volumerendering.metal */,
-				9C8B3E7D279E96C500599C97 /* Type(Deprecated).swift */,
 				9CC39D52279F76000066FC1D /* Math(Deprecated).swift */,
 				9C8B3E77279E8AC700599C97 /* MetalScene(Deprecated).swift */,
 				9C8B3E79279E8BA500599C97 /* Renderer(Deprecated).swift */,
@@ -825,7 +825,7 @@
 				9C8B3E6A279E8AA600599C97 /* VolumeRendering_iOSApp.swift in Sources */,
 				9C21FBCF27A0E904004CE254 /* VolumeTexture.swift in Sources */,
 				9C21FBCD27A0D860004CE254 /* SceneView.swift in Sources */,
-				9C8B3E7E279E96C500599C97 /* Type(Deprecated).swift in Sources */,
+				9C8B3E7E279E96C500599C97 /* Type.swift in Sources */,
 				66C69D8A279EDA1F00D03A93 /* CubeGeometry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
