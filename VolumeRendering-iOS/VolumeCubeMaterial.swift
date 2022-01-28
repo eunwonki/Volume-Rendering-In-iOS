@@ -1,7 +1,7 @@
 import SceneKit
 
 class VolumeCubeMaterial: SCNMaterial {
-    let quality = 128
+    let quality = 512
     
     init(device: MTLDevice) {
         super.init()
@@ -17,6 +17,7 @@ class VolumeCubeMaterial: SCNMaterial {
         
         setValue(quality, forKey: "quality")
         
+        cullMode = .front
         writesToDepthBuffer = true
     }
     

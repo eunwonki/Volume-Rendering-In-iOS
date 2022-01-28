@@ -33,16 +33,14 @@ struct NodeBuffer {
 // https://github.com/TwoTailsGames/Unity-Built-in-Shaders
 float3 ObjSpaceViewDir(float4 v, NodeBuffer node, SCNSceneBuffer scene)
 {
-    float4 worldCameraPos = scene.viewTransform.columns[3];
-    float3 objSpaceCameraPos = (scene.inverseViewProjectionTransform
-                                * worldCameraPos).xyz;
+    float4 worldCameraPos = scene.inverseViewTransform * float4(0, 0, 0, 1);
+    float3 objSpaceCameraPos = (node.inverseModelTransform * worldCameraPos).xyz;
     return objSpaceCameraPos - v.xyz;
 }
 
-float4 UnityObjectToClipPos(float3 inPos, NodeBuffer node, SCNSceneBuffer scene)
+float4 UnityObjectToClipPos(float3 inPos, NodeBuffer node)
 {
-    float3 worldPos = (node.modelTransform * float4(inPos, 1)).xyz;
-    float4 clipPos = scene.viewProjectionTransform * float4(worldPos, 1);
+    float4 clipPos = node.modelViewProjectionTransform * float4(inPos, 1);
     return clipPos;
 }
 
@@ -52,9 +50,9 @@ float3 UnityObjectToWorldNormal(float3 norm, NodeBuffer node)
     return normalize(worldNormal);
 }
 
-float localToDepth(float3 localPos, NodeBuffer node, SCNSceneBuffer scene)
+float localToDepth(float3 localPos, NodeBuffer node)
 {
-    float4 clipPos = UnityObjectToClipPos(localPos, node, scene);
+    float4 clipPos = UnityObjectToClipPos(localPos, node);
     return clipPos.z / clipPos.w;
 }
 
@@ -78,11 +76,10 @@ struct FragmentOut {
 
 vertex VertexOut vertex_func(
     VertexIn in [[ stage_in ]],
-    constant SCNSceneBuffer& scn_frame [[ buffer(0) ]],
     constant NodeBuffer& scn_node [[ buffer(1) ]])
 {
     VertexOut out;
-    out.position = UnityObjectToClipPos(in.position, scn_node, scn_frame);
+    out.position = UnityObjectToClipPos(in.position, scn_node);
     out.normal = UnityObjectToWorldNormal(in.normal, scn_node);
     out.localPosition = in.position;
     return out;
@@ -104,7 +101,7 @@ fragment FragmentOut fragment_func(
                               address::clamp_to_edge);
     FragmentOut out;
     
-    const float boxDiagonal = 1.732;
+    const float boxDiagonal = sqrt(3.0);
     const float stepSize = boxDiagonal / quality;
 
     float3 rayStartPos = in.localPosition + float3(0.5, 0.5, 0.5);
@@ -128,10 +125,10 @@ fragment FragmentOut fragment_func(
             maxDensity = max(maxDensity, density);
     }
     
-    if (maxDensity <  0.0001) discard_fragment();
+    if (maxDensity <  1e-6) discard_fragment();
     
     out.color = float4(maxDensity);
-    out.depth = localToDepth(in.localPosition, scn_node, scn_frame);
+    out.depth = localToDepth(in.localPosition, scn_node);
     return out;
 }
 
