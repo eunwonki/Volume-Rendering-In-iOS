@@ -9,7 +9,8 @@ Implement volume-rendering for patient-data on iOS.
 ### Source
 [Unity Volume Rendering](https://github.com/mlavik1/UnityVolumeRendering)
     
-### MIP (Maximum Intensity Projection)
-![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/1.png?raw=true)
-![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/2.png?raw=true)
-![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/3.png?raw=true)
+### Screenshot
+
+|surface rendring|direct volume rendering|maximum intensity projection|
+|-|-|-|
+|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/1.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/2.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/3.jpeg?raw=true)|
