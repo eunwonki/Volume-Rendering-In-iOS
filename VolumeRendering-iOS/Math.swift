@@ -1,38 +1,39 @@
 import MetalKit
 
-public var X_AXIS: SIMD3<Float>{
-    return SIMD3<Float>(1,0,0)
+public var X_AXIS: SIMD3<Float> {
+    return SIMD3<Float>(1, 0, 0)
 }
 
-public var Y_AXIS: SIMD3<Float>{
-    return SIMD3<Float>(0,1,0)
+public var Y_AXIS: SIMD3<Float> {
+    return SIMD3<Float>(0, 1, 0)
 }
 
-public var Z_AXIS: SIMD3<Float>{
-    return SIMD3<Float>(0,0,1)
+public var Z_AXIS: SIMD3<Float> {
+    return SIMD3<Float>(0, 0, 1)
 }
 
 extension Float {
-    var toRadians: Float{
+    var toRadians: Float {
         return (self / 180.0) * Float.pi
     }
     
-    var toDegrees: Float{
+    var toDegrees: Float {
         return self * (180.0 / Float.pi)
     }
     
-    static var randomZeroToOne: Float{
+    static var randomZeroToOne: Float {
         return Float(arc4random()) / Float(UINT32_MAX)
     }
 }
 
 extension matrix_float4x4 {
-    mutating func translate(direction: SIMD3<Float>){
+    mutating func translate(direction: SIMD3<Float>) {
         self = self.translateMatrix(direction: direction)
     }
     
     func translateMatrix(direction: SIMD3<Float>)
-    -> matrix_float4x4 {
+        -> matrix_float4x4
+    {
         var result = matrix_identity_float4x4
         
         let x: Float = direction.x
@@ -40,10 +41,10 @@ extension matrix_float4x4 {
         let z: Float = direction.z
         
         result.columns = (
-            SIMD4<Float>(1,0,0,0),
-            SIMD4<Float>(0,1,0,0),
-            SIMD4<Float>(0,0,1,0),
-            SIMD4<Float>(x,y,z,1)
+            SIMD4<Float>(1, 0, 0, 0),
+            SIMD4<Float>(0, 1, 0, 0),
+            SIMD4<Float>(0, 0, 1, 0),
+            SIMD4<Float>(x, y, z, 1)
         )
         
         return matrix_multiply(self, result)
@@ -57,23 +58,23 @@ extension matrix_float4x4 {
         let z: Float = axis.z
         
         result.columns = (
-            SIMD4<Float>(x,0,0,0),
-            SIMD4<Float>(0,y,0,0),
-            SIMD4<Float>(0,0,z,0),
-            SIMD4<Float>(0,0,0,1)
+            SIMD4<Float>(x, 0, 0, 0),
+            SIMD4<Float>(0, y, 0, 0),
+            SIMD4<Float>(0, 0, z, 0),
+            SIMD4<Float>(0, 0, 0, 1)
         )
         
         self = matrix_multiply(self, result)
     }
     
-    
-    mutating func rotate(angle: Float, axis: SIMD3<Float>){
+    mutating func rotate(angle: Float, axis: SIMD3<Float>) {
         self = self.rotatingMatrix(angle: angle, axis: axis)
     }
     
     func rotatingMatrix(angle: Float,
                         axis: float3)
-    -> matrix_float4x4 {
+        -> matrix_float4x4
+    {
         var result = matrix_identity_float4x4
         
         let x: Float = axis.x
@@ -115,10 +116,11 @@ extension matrix_float4x4 {
         return matrix_multiply(self, result)
     }
     
-    //https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
+    // https://gamedev.stackexchange.com/questions/120338/what-does-a-perspective-projection-matrix-look-like-in-opengl
     static func perspective(degreesFov: Float,
                             aspectRatio: Float,
-                            near: Float, far: Float)->matrix_float4x4{
+                            near: Float, far: Float) -> matrix_float4x4
+    {
         let fov = degreesFov.toRadians
         
         let t: Float = tan(fov / 2)
@@ -130,10 +132,10 @@ extension matrix_float4x4 {
         
         var result = matrix_identity_float4x4
         result.columns = (
-            SIMD4<Float>(x,  0,  0,   0),
-            SIMD4<Float>(0,  y,  0,   0),
-            SIMD4<Float>(0,  0,  z,  -1),
-            SIMD4<Float>(0,  0,  w,   0)
+            SIMD4<Float>(x, 0, 0, 0),
+            SIMD4<Float>(0, y, 0, 0),
+            SIMD4<Float>(0, 0, z, -1),
+            SIMD4<Float>(0, 0, w, 0)
         )
         return result
     }
