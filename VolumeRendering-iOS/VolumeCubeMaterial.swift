@@ -2,22 +2,35 @@ import SceneKit
 import SwiftUI
 
 enum Preset: String {
-    case preset1, preset2, preset3, preset4
+    case preset1, preset2, preset3, CT_Coronary_Arteries_2, CT_Lung
 }
 
 enum Method: Int32 {
     case surf, dvr, mip
 }
 
+enum BodyPart {
+    case chest, head
+}
+
 class VolumeCubeMaterial: SCNMaterial {
     struct Uniforms: sizeable {
-        let method: Int32 = Method.surf.rawValue
+        let method: Int32 = Method.dvr.rawValue
         let renderingQuality: Int32 = 512
     }
     
     let quality = 512
-    let preset: Preset = .preset1
+    let bodyPart: BodyPart = .head
+    let preset: Preset = .CT_Coronary_Arteries_2
     var uniform = Uniforms()
+    
+    static let CHEST_SCALE = float3(0.431, 0.431, 0.322)
+    static let HEAD_SCALE = float3(0.23, 0.23, 0.511)
+    
+    var scale: float3 {
+        if bodyPart == .chest { return VolumeCubeMaterial.CHEST_SCALE }
+        else { return VolumeCubeMaterial.HEAD_SCALE }
+    }
     
     init(device: MTLDevice) {
         super.init()
@@ -27,11 +40,13 @@ class VolumeCubeMaterial: SCNMaterial {
         program.fragmentFunctionName = "fragment_func"
         self.program = program
         
-        let (texture, gradient) = VolumeTexture.get(device: device)
+        let texture = bodyPart == .chest
+            ? VolumeTexture.getChest(device: device)
+            : VolumeTexture.getHead(device: device)
         let tProperty = SCNMaterialProperty(contents: texture)
         setValue(tProperty, forKey: "volume")
-        let gProperty = SCNMaterialProperty(contents: gradient)
-        setValue(gProperty, forKey: "gradient")
+        // let gProperty = SCNMaterialProperty(contents: gradient)
+        // setValue(gProperty, forKey: "gradient")
         
         let url = Bundle.main.url(forResource: preset.rawValue, withExtension: "tf")!
         let tf = TransferFunction.load(from: url)

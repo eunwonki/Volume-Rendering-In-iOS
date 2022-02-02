@@ -4,7 +4,7 @@ import simd
 
 struct TransferFunction: Codable
 {
-    var version = 1
+    var version: Int?
     var name: String = ""
     var colourPoints: [ColorPoint] = []
     var alphaPoints: [AlphaPoint] = []

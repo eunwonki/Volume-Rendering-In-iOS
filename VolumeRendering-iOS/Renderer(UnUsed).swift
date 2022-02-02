@@ -52,7 +52,7 @@ class Renderer: NSObject {
         super.init()
         
         setVertexBuffer()
-        (texture, _) = VolumeTexture.get(device: device)
+        texture = VolumeTexture.getChest(device: device)
     }
     
     static func vertexDescriptor() -> MTLVertexDescriptor {
