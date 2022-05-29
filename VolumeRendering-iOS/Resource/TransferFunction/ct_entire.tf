@@ -1,0 +1,62 @@
+{
+   "version":1,
+   "name":"CT-Chest-Entire",
+   "min":-1024,
+   "max":3071,
+   "shift": 0,
+   "colourPoints":[
+      {
+         "dataValue":-1024,
+         "colourValue":{
+            "r":0.11,
+            "g":0.14,
+            "b":0.13,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": -35.0575,
+         "colourValue":{
+            "r":0.469,
+            "g":0.354,
+            "b":0.223,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 180,
+         "colourValue":{
+            "r":1.0,
+            "g":1.0,
+            "b":1.0,
+            "a":1.0
+         }
+      }
+   ],
+   "alphaPoints":[
+      {
+         "dataValue":-1024,
+         "alphaValue":0.0
+      },
+      {
+         "dataValue":-292.224,
+         "alphaValue":0.0
+      },
+      {
+         "dataValue":-205,
+         "alphaValue":0.024
+      },
+      {
+         "dataValue":122.6,
+         "alphaValue":0.03
+      },
+      {
+         "dataValue":614,
+         "alphaValue":0.546
+      },
+      {
+         "dataValue":1215.965,
+         "alphaValue":0.5256
+      }
+   ]
+}

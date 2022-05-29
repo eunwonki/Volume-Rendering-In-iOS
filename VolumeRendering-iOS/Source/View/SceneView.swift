@@ -19,10 +19,10 @@ struct SceneView: UIViewRepresentable {
         let cameraController = scnView.defaultCameraController
         
         let box = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0)
-        box.materials = [VolumeCubeMaterial(device: device)]
+        let material = VolumeCubeMaterial(device: device)
+        box.materials = [material]
         let node = SCNNode(geometry: box)
-        node.scale = SCNVector3(float3(0.431, 0.431, 0.322))
-        node.position = SCNVector3Make(0, 0, 0.5)
+        node.scale = SCNVector3(material.scale)
         root.addChildNode(node)
         
         // for depth test

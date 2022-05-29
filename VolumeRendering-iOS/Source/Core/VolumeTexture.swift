@@ -1,161 +1,71 @@
 import CoreGraphics
 import Metal
 import UIKit
+import simd
 
-class VolumeTexture {
-    static func getChest(device: MTLDevice)
-        -> MTLTexture
-    {
-        let width = 512
-        let height = 512
-        let depth = 161
-        let channel = 1
-        
-        let values = UnsafeMutablePointer<Float>
-            .allocate(capacity: width * height * depth * channel)
-        
-        for i in 0 ..< depth {
-            let ptr = values.advanced(by: width * height * channel * i)
-            let name = String(format: "Chest%04d", arguments: [i])
-            let path = Bundle.main.path(forResource: name, ofType: "png")!
-            let image = UIImage(contentsOfFile: path)!.cgImage!
-            let bitmapInfo =
-                CGImageAlphaInfo.none.rawValue
-                    | CGBitmapInfo.byteOrder32Little.rawValue
-                    | CGBitmapInfo.floatComponents.rawValue
-            let colorSpace = CGColorSpaceCreateDeviceGray()
-            let context =
-                CGContext(data: ptr,
-                          width: width,
-                          height: height,
-                          bitsPerComponent: 32,
-                          bytesPerRow: width * 4,
-                          space: colorSpace,
-                          bitmapInfo: bitmapInfo)!
-            
-            context.draw(image, in: CGRect(x: 0, y: 0,
-                                           width: width, height: height))
-        }
-        
-        let textureDescriptor = MTLTextureDescriptor()
-        textureDescriptor.textureType = .type3D
-        textureDescriptor.pixelFormat = .r32Float
-        textureDescriptor.width = width
-        textureDescriptor.height = height
-        textureDescriptor.depth = depth
-        textureDescriptor.usage = .shaderRead
-        
-        let texture = device.makeTexture(descriptor: textureDescriptor)
-        texture?.replace(region: MTLRegionMake3D(0, 0, 0,
-                                                 width, height, depth),
-                         mipmapLevel: 0,
-                         slice: 0,
-                         withBytes: values,
-                         bytesPerRow: Float.size * channel * width,
-                         bytesPerImage: width * height * Float.size * channel)
-        
-        return texture!
-        
-        // don't use gradient yet
-        
-//        channel = 4
-//        let gradientData = UnsafeMutablePointer<Float>
-//            .allocate(capacity: width * height * depth * channel)
-//
-//        for i in (width * height) ..< ((width * height * depth) - (width * height)) {
-//            if (i + 1) % width == 0 || i % width == 0 { continue }
-//            if (i % (width * height)) >= width * (height - 1)
-//                || (i % (width * height) < width) { continue }
-//            if (i + 1) > width * height * (depth - 1) || i < width * height { continue }
-//
-//            let xUpper = values[i + 1]
-//            let xLower = values[i - 1]
-//            let yUpper = values[i + width]
-//            let yLower = values[i - width]
-//            let zUpper = values[i + (width * height)]
-//            let zLower = values[i - (width * height)]
-//
-//            let gx = (xLower - xUpper)
-//            let gy = (yLower - yUpper)
-//            let gz = (zLower - zUpper)
-//
-//            gradientData[i * channel] = gx
-//            gradientData[i * channel + 1] = gy
-//            gradientData[i * channel + 2] = gz
-//            gradientData[i * channel + 3] = values[i]
-//        }
-//
-//        let gradientTextureDescriptor = MTLTextureDescriptor()
-//        gradientTextureDescriptor.textureType = .type3D
-//        gradientTextureDescriptor.pixelFormat = .rgba32Float
-//        gradientTextureDescriptor.width = width
-//        gradientTextureDescriptor.height = height
-//        gradientTextureDescriptor.depth = depth
-//        gradientTextureDescriptor.usage = .shaderRead
-//
-//        let gradient = device.makeTexture(descriptor: textureDescriptor)
-//        gradient?.replace(region: MTLRegionMake3D(0, 0, 0,
-//                                                  width, height, depth),
-//                          mipmapLevel: 0,
-//                          slice: 0,
-//                          withBytes: gradientData,
-//                          bytesPerRow: Float.size * channel * width,
-//                          bytesPerImage: width * height * Float.size * channel)
-//
-//        gradientData.deallocate()
-//        values.deallocate()
-//
-//        return (texture!, gradient!)
+class VolumeTextureFactory {
+    var part: VolumeCubeMaterial.BodyPart
+    var resolution: float3
+    var dimension: int3
+    var scale: float3 {
+        return float3(
+            resolution.x * Float(dimension.x),
+            resolution.y * Float(dimension.y),
+            resolution.z * Float(dimension.z)
+        )
     }
     
-    static func getHead(device: MTLDevice) -> MTLTexture {
-        let width = 512
-        let height = 512
-        let depth = 511
-        let channel = 1
+    init(_ part: VolumeCubeMaterial.BodyPart)
+    {
+        self.part = part
         
-        let values = UnsafeMutablePointer<Float>
-            .allocate(capacity: width * height * depth * channel)
-        
-        for i in 0 ..< depth {
-            let ptr = values.advanced(by: width * height * channel * i)
-            let name = String(format: "Head%04d", arguments: [i])
-            let path = Bundle.main.path(forResource: name, ofType: "png")!
-            let image = UIImage(contentsOfFile: path)!.cgImage!
-            let bitmapInfo =
-                CGImageAlphaInfo.none.rawValue
-                    | CGBitmapInfo.byteOrder32Little.rawValue
-                    | CGBitmapInfo.floatComponents.rawValue
-            let colorSpace = CGColorSpaceCreateDeviceGray()
-            let context =
-                CGContext(data: ptr,
-                          width: width,
-                          height: height,
-                          bitsPerComponent: 32,
-                          bytesPerRow: width * 4,
-                          space: colorSpace,
-                          bitmapInfo: bitmapInfo)!
-            
-            context.draw(image, in: CGRect(x: 0, y: 0,
-                                           width: width, height: height))
+        if part == .head {
+            resolution = float3(0.000449, 0.000449, 0.000501)
+            dimension = int3(512, 512, 511)
+            return
         }
         
-        let textureDescriptor = MTLTextureDescriptor()
-        textureDescriptor.textureType = .type3D
-        textureDescriptor.pixelFormat = .r32Float
-        textureDescriptor.width = width
-        textureDescriptor.height = height
-        textureDescriptor.depth = depth
-        textureDescriptor.usage = .shaderRead
+        else if part == .chest{
+            resolution = float3(0.000586, 0.000586, 0.002)
+            dimension = int3(512, 512, 179)
+            return
+        }
         
-        let texture = device.makeTexture(descriptor: textureDescriptor)
+        resolution = float3(1, 1, 1)
+        dimension = int3(1, 1, 1)
+    }
+    
+    func generate(device: MTLDevice) -> MTLTexture
+    {
+        // example data type specification
+        // type: Int16
+        // size: dimension.x * dimension.y * dimension.z
+        
+        let filename = part == .head ? "head" : "chest"
+        let url = Bundle.main.url(forResource: filename, withExtension: "raw")!
+        let data = try! Data(contentsOf: url)
+        
+        let descriptor = MTLTextureDescriptor()
+        descriptor.textureType = .type3D
+        descriptor.pixelFormat = .r16Sint
+        descriptor.width = Int(dimension.x)
+        descriptor.height = Int(dimension.y)
+        descriptor.depth = Int(dimension.z)
+        descriptor.usage = .shaderRead
+        
+        let bytesPerRow = MemoryLayout<Int16>.size * descriptor.width
+        let bytesPerImage = bytesPerRow * descriptor.height
+        
+        let texture = device.makeTexture(descriptor: descriptor)
         texture?.replace(region: MTLRegionMake3D(0, 0, 0,
-                                                 width, height, depth),
+                                                 descriptor.width,
+                                                 descriptor.height,
+                                                 descriptor.depth),
                          mipmapLevel: 0,
                          slice: 0,
-                         withBytes: values,
-                         bytesPerRow: Float.size * channel * width,
-                         bytesPerImage: width * height * Float.size * channel)
+                         withBytes: (data as NSData).bytes,
+                         bytesPerRow: bytesPerRow,
+                         bytesPerImage: bytesPerImage)
         
         return texture!
     }

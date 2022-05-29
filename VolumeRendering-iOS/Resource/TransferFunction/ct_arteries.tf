@@ -1,0 +1,102 @@
+{
+   "version":1,
+   "name":"CT-Head-Arteries",
+   "min":-1024,
+   "max":3071,
+   "shift": 0,
+   "colourPoints":[
+      {
+         "dataValue":-2048,
+         "colourValue":{
+            "r":0.0,
+            "g":0.0,
+            "b":0.0,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 142.68,
+         "colourValue":{
+            "r":0.0,
+            "g":0.0,
+            "b":0.0,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 145.02,
+         "colourValue":{
+            "r":0.6157,
+            "g":0.0,
+            "b":0.157,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 192.17,
+         "colourValue":{
+            "r":0.9098,
+            "g":0.4549,
+            "b":0.0,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 217.24,
+         "colourValue":{
+            "r":0.9725,
+            "g":0.8078,
+            "b":0.6118,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 384.35,
+         "colourValue":{
+            "r":0.9098,
+            "g":0.9098,
+            "b":1.0,
+            "a":1.0
+         }
+      },
+      {
+         "dataValue": 3661,
+         "colourValue":{
+            "r":1.0,
+            "g":1.0,
+            "b":1.0,
+            "a":1.0
+         }
+      }
+   ],
+   "alphaPoints":[
+      {
+         "dataValue":-2048,
+         "alphaValue":0.0
+      },
+      {
+         "dataValue":-142.68,
+         "alphaValue":0.0
+      },
+      {
+         "dataValue":145.02,
+         "alphaValue":0.12
+      },
+      {
+         "dataValue":192.17,
+         "alphaValue":0.56
+      },
+      {
+         "dataValue":217.24,
+         "alphaValue":0.78
+      },
+      {
+         "dataValue":384.35,
+         "alphaValue":0.83
+      },
+      {
+         "dataValue":3661.00,
+         "alphaValue":0.83
+      }
+   ]
+}

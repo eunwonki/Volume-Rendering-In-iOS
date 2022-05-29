@@ -9,6 +9,10 @@ struct TransferFunction: Codable
     var colourPoints: [ColorPoint] = []
     var alphaPoints: [AlphaPoint] = []
     
+    var min: Float = -1024
+    var max: Float = 3071
+    var shift: Float = 0
+    
     static func load(from: URL) -> TransferFunction
     {
         let data = try! Data(contentsOf: from)
@@ -20,29 +24,33 @@ struct TransferFunction: Codable
         let TEXTURE_WIDTH = 512
         let TEXTURE_HEIGHT = 2
         
-        var tfCols = [Color].init(repeating: Color(), count: TEXTURE_WIDTH * TEXTURE_HEIGHT)
+        var tfCols = [RGBAColor].init(repeating: RGBAColor(), count: TEXTURE_WIDTH * TEXTURE_HEIGHT)
         
         // sort
         var cols = colourPoints.sorted(by: { $0.dataValue < $1.dataValue })
         var alps = alphaPoints.sorted(by: { $0.dataValue < $1.dataValue })
         
+        // apply shift
+        cols = cols.map { var tmp = $0; tmp.dataValue += shift; return tmp }
+        alps = alps.map { var tmp = $0; tmp.dataValue += shift; return tmp }
+        
         // add beginning and end
-        if cols.count == 0 || cols.last!.dataValue < 1
+        if cols.count == 0 || cols.last!.dataValue < max
         {
-            cols.append(ColorPoint(dataValue: 1, colourValue: Color(r: 1, g: 1, b: 1, a: 1)))
+            cols.append(ColorPoint(dataValue: min, colourValue: RGBAColor(r: 1, g: 1, b: 1, a: 1)))
         }
-        if cols.first!.dataValue > 0
+        if cols.first!.dataValue > min
         {
-            cols.insert(ColorPoint(dataValue: 0, colourValue: Color(r: 1, g: 1, b: 1, a: 1)), at: 0)
+            cols.insert(ColorPoint(dataValue: max, colourValue: RGBAColor(r: 1, g: 1, b: 1, a: 1)), at: 0)
         }
         
-        if alps.count == 0 || alps.last!.dataValue < 1
+        if alps.count == 0 || alps.last!.dataValue < max
         {
-            alps.append(AlphaPoint(dataValue: 1, alphaValue: 1))
+            alps.append(AlphaPoint(dataValue: min, alphaValue: 1))
         }
-        if alps.first!.dataValue > 0
+        if alps.first!.dataValue > min
         {
-            alps.insert(AlphaPoint(dataValue: 0, alphaValue: 0), at: 0)
+            alps.insert(AlphaPoint(dataValue: max, alphaValue: 0), at: 0)
         }
         
         var iCurrColor = 0
@@ -51,11 +59,13 @@ struct TransferFunction: Codable
         for ix in 0 ..< TEXTURE_WIDTH
         {
             let t = Float(ix) / Float(TEXTURE_WIDTH - 1)
-            while iCurrColor < cols.count - 2, cols[iCurrColor + 1].dataValue < t
+            while iCurrColor < cols.count - 2,
+                  normalize(cols[iCurrColor + 1].dataValue) < t
             {
                 iCurrColor += 1
             }
-            while iCurrAlpha < alps.count - 2, alps[iCurrAlpha + 1].dataValue < t
+            while iCurrAlpha < alps.count - 2,
+                  normalize(alps[iCurrAlpha + 1].dataValue) < t
             {
                 iCurrAlpha += 1
             }
@@ -65,8 +75,8 @@ struct TransferFunction: Codable
             let leftAlp = alps[iCurrAlpha]
             let rightAlp = alps[iCurrAlpha + 1]
 
-            let tCol = (simd_clamp(t, leftCol.dataValue, rightCol.dataValue) - leftCol.dataValue) / (rightCol.dataValue - leftCol.dataValue)
-            let tAlp = (simd_clamp(t, leftAlp.dataValue, rightAlp.dataValue) - leftAlp.dataValue) / (rightAlp.dataValue - leftAlp.dataValue)
+            let tCol = normalize((simd_clamp(t, leftCol.dataValue, rightCol.dataValue) - leftCol.dataValue) / (rightCol.dataValue - leftCol.dataValue))
+            let tAlp = normalize((simd_clamp(t, leftAlp.dataValue, rightAlp.dataValue) - leftAlp.dataValue) / (rightAlp.dataValue - leftAlp.dataValue))
             
             var pixCol = rightCol.colourValue * Float(tCol) + leftCol.colourValue * Float(1 - tCol)
             pixCol.a = rightAlp.alphaValue * tAlp + leftAlp.alphaValue * (1 - tAlp)
@@ -89,14 +99,19 @@ struct TransferFunction: Codable
                          mipmapLevel: 0,
                          slice: 0,
                          withBytes: tfCols,
-                         bytesPerRow: Color.size * TEXTURE_WIDTH,
-                         bytesPerImage: TEXTURE_WIDTH * TEXTURE_HEIGHT * Color.size)
+                         bytesPerRow: RGBAColor.size * TEXTURE_WIDTH,
+                         bytesPerImage: TEXTURE_WIDTH * TEXTURE_HEIGHT * RGBAColor.size)
         
         return texture!
     }
+    
+    func normalize(_ value: Float) -> Float
+    {
+        return (value - min) / (max - min)
+    }
 }
 
-struct Color: Codable, sizeable
+struct RGBAColor: Codable, sizeable
 {
     var r: Float = 0
     var g: Float = 0
@@ -107,7 +122,7 @@ struct Color: Codable, sizeable
 struct ColorPoint: Codable
 {
     var dataValue: Float = 0
-    var colourValue: Color = .init()
+    var colourValue: RGBAColor = .init()
 }
 
 struct AlphaPoint: Codable
@@ -116,12 +131,12 @@ struct AlphaPoint: Codable
     var alphaValue: Float = 0
 }
 
-func * (color: Color, value: Float) -> Color
+func * (color: RGBAColor, value: Float) -> RGBAColor
 {
-    return Color(r: color.r * value, g: color.g * value, b: color.b * value, a: color.a * value)
+    return RGBAColor(r: color.r * value, g: color.g * value, b: color.b * value, a: color.a * value)
 }
 
-func + (a: Color, b: Color) -> Color
+func + (a: RGBAColor, b: RGBAColor) -> RGBAColor
 {
-    return Color(r: a.r + b.r, g: a.g + b.g, b: a.b + b.b, a: a.a + b.a)
+    return RGBAColor(r: a.r + b.r, g: a.g + b.g, b: a.b + b.b, a: a.a + b.a)
 }

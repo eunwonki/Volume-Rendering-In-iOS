@@ -1,52 +1,47 @@
 import SceneKit
 import SwiftUI
 
-enum Preset: String {
-    case preset1, preset2, preset3, CT_Coronary_Arteries_2, CT_Lung
-}
-
-enum Method: Int32 {
-    case surf, dvr, mip
-}
-
-enum BodyPart {
-    case chest, head
-}
-
 class VolumeCubeMaterial: SCNMaterial {
+    enum Preset: String {
+        case ct_arteries, ct_entire, ct_lung
+    }
+
+    enum Method: Int32 {
+        case surf, dvr, mip
+    }
+
+    enum BodyPart {
+        case chest, head
+    }
+    
     struct Uniforms: sizeable {
+        var isLightingOn: Bool = true
         let method: Int32 = Method.dvr.rawValue
-        let renderingQuality: Int32 = 512
+        var renderingQuality: Int32 = 128
+        // Int16 type size mismatches in metal shader... so I use Int32.
+        var voxelMinValue: Int32 = -1024
+        var voxelMaxValue: Int32 = 3071
     }
     
-    let quality = 512
     let bodyPart: BodyPart = .head
-    let preset: Preset = .CT_Coronary_Arteries_2
+    let preset: Preset = .ct_arteries
     var uniform = Uniforms()
+    var textureGenerator: VolumeTextureFactory
     
-    static let CHEST_SCALE = float3(0.431, 0.431, 0.322)
-    static let HEAD_SCALE = float3(0.23, 0.23, 0.511)
-    
-    var scale: float3 {
-        if bodyPart == .chest { return VolumeCubeMaterial.CHEST_SCALE }
-        else { return VolumeCubeMaterial.HEAD_SCALE }
-    }
+    var scale: float3 { textureGenerator.scale }
     
     init(device: MTLDevice) {
+        textureGenerator = VolumeTextureFactory(bodyPart)
+        
         super.init()
         
         let program = SCNProgram()
-        program.vertexFunctionName = "vertex_func"
-        program.fragmentFunctionName = "fragment_func"
+        program.vertexFunctionName = "volume_vertex"
+        program.fragmentFunctionName = "volume_fragment"
         self.program = program
         
-        let texture = bodyPart == .chest
-            ? VolumeTexture.getChest(device: device)
-            : VolumeTexture.getHead(device: device)
-        let tProperty = SCNMaterialProperty(contents: texture)
-        setValue(tProperty, forKey: "volume")
-        // let gProperty = SCNMaterialProperty(contents: gradient)
-        // setValue(gProperty, forKey: "gradient")
+        let tProperty = SCNMaterialProperty(contents: textureGenerator.generate(device: device))
+        setValue(tProperty, forKey: "dicom")
         
         let url = Bundle.main.url(forResource: preset.rawValue, withExtension: "tf")!
         let tf = TransferFunction.load(from: url)
