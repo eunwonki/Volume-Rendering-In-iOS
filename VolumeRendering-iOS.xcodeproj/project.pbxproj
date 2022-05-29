@@ -11,14 +11,12 @@
 		6619F07E27A5733900469541 /* preset1.tf in Resources */ = {isa = PBXBuildFile; fileRef = 6619F07A27A5733900469541 /* preset1.tf */; };
 		6619F07F27A5733900469541 /* preset2.tf in Resources */ = {isa = PBXBuildFile; fileRef = 6619F07B27A5733900469541 /* preset2.tf */; };
 		66499F4C27A1887200F20AAB /* VolumeCubeMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */; };
-		66C69D8A279EDA1F00D03A93 /* CubeGeometry(UnUsed).swift in Sources */ = {isa = PBXBuildFile; fileRef = 66C69D89279EDA1F00D03A93 /* CubeGeometry(UnUsed).swift */; };
 		9C21FBCD27A0D860004CE254 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21FBCC27A0D860004CE254 /* SceneView.swift */; };
 		9C21FBCF27A0E904004CE254 /* VolumeTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */; };
 		9C8B3E6A279E8AA600599C97 /* VolumeRendering_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E69279E8AA600599C97 /* VolumeRendering_iOSApp.swift */; };
 		9C8B3E6C279E8AA600599C97 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E6B279E8AA600599C97 /* ContentView.swift */; };
 		9C8B3E6E279E8AA800599C97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8B3E6D279E8AA800599C97 /* Assets.xcassets */; };
 		9C8B3E71279E8AA800599C97 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C8B3E70279E8AA800599C97 /* Preview Assets.xcassets */; };
-		9C8B3E7A279E8BA500599C97 /* Renderer(UnUsed).swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E79279E8BA500599C97 /* Renderer(UnUsed).swift */; };
 		9C8B3E7C279E8C8100599C97 /* volumerendering.metal in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7B279E8C8100599C97 /* volumerendering.metal */; };
 		9C8B3E7E279E96C500599C97 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C8B3E7D279E96C500599C97 /* Type.swift */; };
 		9CC39D53279F76000066FC1D /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC39D52279F76000066FC1D /* Math.swift */; };
@@ -704,15 +702,13 @@
 		6619F07A27A5733900469541 /* preset1.tf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = preset1.tf; sourceTree = "<group>"; };
 		6619F07B27A5733900469541 /* preset2.tf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = preset2.tf; sourceTree = "<group>"; };
 		66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeCubeMaterial.swift; sourceTree = "<group>"; };
-		66C69D89279EDA1F00D03A93 /* CubeGeometry(UnUsed).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CubeGeometry(UnUsed).swift"; sourceTree = "<group>"; };
 		9C21FBCC27A0D860004CE254 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
-		9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VolumeTexture.swift; path = "VolumeRendering-iOS/VolumeTexture.swift"; sourceTree = SOURCE_ROOT; };
+		9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VolumeTexture.swift; path = "VolumeRendering-iOS/Source/Core/VolumeTexture.swift"; sourceTree = SOURCE_ROOT; };
 		9C8B3E66279E8AA600599C97 /* VolumeRendering-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VolumeRendering-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9C8B3E69279E8AA600599C97 /* VolumeRendering_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeRendering_iOSApp.swift; sourceTree = "<group>"; };
 		9C8B3E6B279E8AA600599C97 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9C8B3E6D279E8AA800599C97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C8B3E70279E8AA800599C97 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		9C8B3E79279E8BA500599C97 /* Renderer(UnUsed).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Renderer(UnUsed).swift"; sourceTree = "<group>"; };
 		9C8B3E7B279E8C8100599C97 /* volumerendering.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = volumerendering.metal; sourceTree = "<group>"; };
 		9C8B3E7D279E96C500599C97 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		9CC39D52279F76000066FC1D /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
@@ -1404,6 +1400,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		66320B4428430A1E005D3347 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				66320B4728430A41005D3347 /* Core */,
+				66320B4528430A2C005D3347 /* Helper */,
+				66320B4628430A3B005D3347 /* View */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		66320B4528430A2C005D3347 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				9C8B3E7D279E96C500599C97 /* Type.swift */,
+				9CC39D52279F76000066FC1D /* Math.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		66320B4628430A3B005D3347 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9C21FBCC27A0D860004CE254 /* SceneView.swift */,
+				9C8B3E6B279E8AA600599C97 /* ContentView.swift */,
+				9C8B3E69279E8AA600599C97 /* VolumeRendering_iOSApp.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		66320B4728430A41005D3347 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				9C8B3E7B279E8C8100599C97 /* volumerendering.metal */,
+				66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */,
+				E395877A27A3C445003F54D1 /* TransferFunction.swift */,
+				9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		66EFC6BA27A4394D0027F0D0 /* TransferFunction */ = {
 			isa = PBXGroup;
 			children = (
@@ -1435,18 +1471,8 @@
 		9C8B3E68279E8AA600599C97 /* VolumeRendering-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				9CC39D4F279F6E8F0066FC1D /* Data */,
-				9C21FBCC27A0D860004CE254 /* SceneView.swift */,
-				E395877A27A3C445003F54D1 /* TransferFunction.swift */,
-				66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */,
-				9C21FBCE27A0E904004CE254 /* VolumeTexture.swift */,
-				9C8B3E7D279E96C500599C97 /* Type.swift */,
-				9C8B3E7B279E8C8100599C97 /* volumerendering.metal */,
-				9CC39D52279F76000066FC1D /* Math.swift */,
-				66C69D89279EDA1F00D03A93 /* CubeGeometry(UnUsed).swift */,
-				9C8B3E79279E8BA500599C97 /* Renderer(UnUsed).swift */,
-				9C8B3E6B279E8AA600599C97 /* ContentView.swift */,
-				9C8B3E69279E8AA600599C97 /* VolumeRendering_iOSApp.swift */,
+				66320B4428430A1E005D3347 /* Source */,
+				9CC39D4F279F6E8F0066FC1D /* Resource */,
 				9C8B3E6D279E8AA800599C97 /* Assets.xcassets */,
 				9C8B3E6F279E8AA800599C97 /* Preview Content */,
 			);
@@ -1461,13 +1487,13 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		9CC39D4F279F6E8F0066FC1D /* Data */ = {
+		9CC39D4F279F6E8F0066FC1D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
 				66EFC6BA27A4394D0027F0D0 /* TransferFunction */,
 				E395877F27A3D2DC003F54D1 /* Images */,
 			);
-			path = Data;
+			path = Resource;
 			sourceTree = "<group>";
 		};
 		E303143927AA69440058A7C7 /* Chest */ = {
@@ -2915,14 +2941,12 @@
 				9C8B3E6C279E8AA600599C97 /* ContentView.swift in Sources */,
 				9C8B3E7C279E8C8100599C97 /* volumerendering.metal in Sources */,
 				9CC39D53279F76000066FC1D /* Math.swift in Sources */,
-				9C8B3E7A279E8BA500599C97 /* Renderer(UnUsed).swift in Sources */,
 				66499F4C27A1887200F20AAB /* VolumeCubeMaterial.swift in Sources */,
 				9C8B3E6A279E8AA600599C97 /* VolumeRendering_iOSApp.swift in Sources */,
 				9C21FBCF27A0E904004CE254 /* VolumeTexture.swift in Sources */,
 				E395877B27A3C445003F54D1 /* TransferFunction.swift in Sources */,
 				9C21FBCD27A0D860004CE254 /* SceneView.swift in Sources */,
 				9C8B3E7E279E96C500599C97 /* Type.swift in Sources */,
-				66C69D8A279EDA1F00D03A93 /* CubeGeometry(UnUsed).swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
