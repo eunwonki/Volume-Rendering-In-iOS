@@ -2,6 +2,7 @@ import CoreGraphics
 import Metal
 import UIKit
 import simd
+import ZIPFoundation
 
 class VolumeTextureFactory {
     var part: VolumeCubeMaterial.BodyPart
@@ -42,8 +43,14 @@ class VolumeTextureFactory {
         // size: dimension.x * dimension.y * dimension.z
         
         let filename = part == .head ? "head" : "chest"
-        let url = Bundle.main.url(forResource: filename, withExtension: "raw")!
-        let data = try! Data(contentsOf: url)
+        let url = Bundle.main.url(forResource: filename, withExtension: "raw.zip")!
+        let archive = Archive(url: url, accessMode: .read)!
+        var data = Data()
+        for entry in archive { // unzip data
+            _ = try! archive.extract(entry) {
+                data.append($0)
+            }
+        }
         
         let descriptor = MTLTextureDescriptor()
         descriptor.textureType = .type3D

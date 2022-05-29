@@ -17,7 +17,7 @@ class VolumeCubeMaterial: SCNMaterial {
     struct Uniforms: sizeable {
         var isLightingOn: Bool = true
         let method: Int32 = Method.dvr.rawValue
-        var renderingQuality: Int32 = 128
+        var renderingQuality: Int32 = 512
         // Int16 type size mismatches in metal shader... so I use Int32.
         var voxelMinValue: Int32 = -1024
         var voxelMaxValue: Int32 = 3071

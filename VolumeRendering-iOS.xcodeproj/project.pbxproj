@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		66072805284328D80028EE15 /* shared.metal in Sources */ = {isa = PBXBuildFile; fileRef = 66072804284328D80028EE15 /* shared.metal */; };
-		6607280E28436EF60028EE15 /* head.raw in Resources */ = {isa = PBXBuildFile; fileRef = 6607280C28436EF50028EE15 /* head.raw */; };
-		6607280F28436EF60028EE15 /* chest.raw in Resources */ = {isa = PBXBuildFile; fileRef = 6607280D28436EF60028EE15 /* chest.raw */; };
+		66072812284370AE0028EE15 /* chest.raw.zip in Resources */ = {isa = PBXBuildFile; fileRef = 66072810284370AE0028EE15 /* chest.raw.zip */; };
+		66072813284370AE0028EE15 /* head.raw.zip in Resources */ = {isa = PBXBuildFile; fileRef = 66072811284370AE0028EE15 /* head.raw.zip */; };
+		66072816284372540028EE15 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 66072815284372540028EE15 /* ZIPFoundation */; };
 		6619F07E27A5733900469541 /* ct_lung.tf in Resources */ = {isa = PBXBuildFile; fileRef = 6619F07A27A5733900469541 /* ct_lung.tf */; };
 		66499F4C27A1887200F20AAB /* VolumeCubeMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */; };
 		9C21FBCD27A0D860004CE254 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C21FBCC27A0D860004CE254 /* SceneView.swift */; };
@@ -28,8 +29,8 @@
 
 /* Begin PBXFileReference section */
 		66072804284328D80028EE15 /* shared.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = shared.metal; sourceTree = "<group>"; };
-		6607280C28436EF50028EE15 /* head.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = head.raw; sourceTree = "<group>"; };
-		6607280D28436EF60028EE15 /* chest.raw */ = {isa = PBXFileReference; lastKnownFileType = file; path = chest.raw; sourceTree = "<group>"; };
+		66072810284370AE0028EE15 /* chest.raw.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = chest.raw.zip; sourceTree = "<group>"; };
+		66072811284370AE0028EE15 /* head.raw.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = head.raw.zip; sourceTree = "<group>"; };
 		6619F07A27A5733900469541 /* ct_lung.tf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ct_lung.tf; sourceTree = "<group>"; };
 		66499F4B27A1887200F20AAB /* VolumeCubeMaterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeCubeMaterial.swift; sourceTree = "<group>"; };
 		9C21FBCC27A0D860004CE254 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
@@ -52,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				66072816284372540028EE15 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,8 +158,8 @@
 		E395877F27A3D2DC003F54D1 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				6607280D28436EF60028EE15 /* chest.raw */,
-				6607280C28436EF50028EE15 /* head.raw */,
+				66072810284370AE0028EE15 /* chest.raw.zip */,
+				66072811284370AE0028EE15 /* head.raw.zip */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -178,6 +180,9 @@
 			dependencies = (
 			);
 			name = "VolumeRendering-iOS";
+			packageProductDependencies = (
+				66072815284372540028EE15 /* ZIPFoundation */,
+			);
 			productName = "VolumeRendering-iOS";
 			productReference = 9C8B3E66279E8AA600599C97 /* VolumeRendering-iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -206,6 +211,9 @@
 				Base,
 			);
 			mainGroup = 9C8B3E5D279E8AA600599C97;
+			packageReferences = (
+				66072814284372540028EE15 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+			);
 			productRefGroup = 9C8B3E67279E8AA600599C97 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -220,12 +228,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6607280F28436EF60028EE15 /* chest.raw in Resources */,
 				E303143527AA65220058A7C7 /* ct_entire.tf in Resources */,
 				6619F07E27A5733900469541 /* ct_lung.tf in Resources */,
 				E303143827AA67790058A7C7 /* ct_arteries.tf in Resources */,
 				9C8B3E71279E8AA800599C97 /* Preview Assets.xcassets in Resources */,
-				6607280E28436EF60028EE15 /* head.raw in Resources */,
+				66072813284370AE0028EE15 /* head.raw.zip in Resources */,
+				66072812284370AE0028EE15 /* chest.raw.zip in Resources */,
 				9C8B3E6E279E8AA800599C97 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,6 +459,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		66072814284372540028EE15 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		66072815284372540028EE15 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 66072814284372540028EE15 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9C8B3E5E279E8AA600599C97 /* Project object */;
 }
