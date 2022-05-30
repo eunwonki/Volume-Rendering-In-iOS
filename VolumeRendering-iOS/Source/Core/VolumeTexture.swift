@@ -36,13 +36,15 @@ class VolumeTextureFactory {
         dimension = int3(1, 1, 1)
     }
     
-    func generate(device: MTLDevice) -> MTLTexture
+    func generate(device: MTLDevice) -> MTLTexture?
     {
         // example data type specification
         // type: Int16
         // size: dimension.x * dimension.y * dimension.z
         
-        let filename = part == .head ? "head" : "chest"
+        if part == .none { return nil }
+        
+        let filename = part.rawValue
         let url = Bundle.main.url(forResource: filename, withExtension: "raw.zip")!
         let archive = Archive(url: url, accessMode: .read)!
         var data = Data()

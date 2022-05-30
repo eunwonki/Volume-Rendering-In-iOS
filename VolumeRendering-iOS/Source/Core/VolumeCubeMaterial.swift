@@ -10,8 +10,9 @@ class VolumeCubeMaterial: SCNMaterial {
         case surf, dvr, mip
     }
 
-    enum BodyPart {
-        case chest, head
+    enum BodyPart: String, CaseIterable, Identifiable {
+        var id: RawValue { rawValue }
+        case none, chest, head
     }
     
     struct Uniforms: sizeable {
@@ -23,15 +24,14 @@ class VolumeCubeMaterial: SCNMaterial {
         var voxelMaxValue: Int32 = 3071
     }
     
-    let bodyPart: BodyPart = .head
     let preset: Preset = .ct_arteries
     var uniform = Uniforms()
     var textureGenerator: VolumeTextureFactory
     
     var scale: float3 { textureGenerator.scale }
     
-    init(device: MTLDevice) {
-        textureGenerator = VolumeTextureFactory(bodyPart)
+    init(device: MTLDevice, part: BodyPart) {
+        textureGenerator = VolumeTextureFactory(part)
         
         super.init()
         
@@ -40,7 +40,7 @@ class VolumeCubeMaterial: SCNMaterial {
         program.fragmentFunctionName = "volume_fragment"
         self.program = program
         
-        let tProperty = SCNMaterialProperty(contents: textureGenerator.generate(device: device))
+        let tProperty = SCNMaterialProperty(contents: textureGenerator.generate(device: device) as Any)
         setValue(tProperty, forKey: "dicom")
         
         let url = Bundle.main.url(forResource: preset.rawValue, withExtension: "tf")!

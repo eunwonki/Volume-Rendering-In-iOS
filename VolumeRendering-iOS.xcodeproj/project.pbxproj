@@ -25,6 +25,7 @@
 		E303143527AA65220058A7C7 /* ct_entire.tf in Resources */ = {isa = PBXBuildFile; fileRef = E303143327AA65210058A7C7 /* ct_entire.tf */; };
 		E303143827AA67790058A7C7 /* ct_arteries.tf in Resources */ = {isa = PBXBuildFile; fileRef = E303143727AA67790058A7C7 /* ct_arteries.tf */; };
 		E395877B27A3C445003F54D1 /* TransferFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E395877A27A3C445003F54D1 /* TransferFunction.swift */; };
+		E3DB020D2844862E001F1E82 /* SceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DB020C2844862E001F1E82 /* SceneViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		E303143327AA65210058A7C7 /* ct_entire.tf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ct_entire.tf; sourceTree = "<group>"; };
 		E303143727AA67790058A7C7 /* ct_arteries.tf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ct_arteries.tf; sourceTree = "<group>"; };
 		E395877A27A3C445003F54D1 /* TransferFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferFunction.swift; sourceTree = "<group>"; };
+		E3DB020C2844862E001F1E82 /* SceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 				9C21FBCC27A0D860004CE254 /* SceneView.swift */,
 				9C8B3E6B279E8AA600599C97 /* ContentView.swift */,
 				9C8B3E69279E8AA600599C97 /* VolumeRendering_iOSApp.swift */,
+				E3DB020C2844862E001F1E82 /* SceneViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				9C8B3E6C279E8AA600599C97 /* ContentView.swift in Sources */,
 				9C8B3E7C279E8C8100599C97 /* volumerendering.metal in Sources */,
 				9CC39D53279F76000066FC1D /* Math.swift in Sources */,
+				E3DB020D2844862E001F1E82 /* SceneViewController.swift in Sources */,
 				66499F4C27A1887200F20AAB /* VolumeCubeMaterial.swift in Sources */,
 				9C8B3E6A279E8AA600599C97 /* VolumeRendering_iOSApp.swift in Sources */,
 				66072805284328D80028EE15 /* shared.metal in Sources */,
