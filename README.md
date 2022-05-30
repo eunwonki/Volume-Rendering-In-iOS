@@ -5,10 +5,33 @@ Implement volume-rendering for patient-data on iOS.
 ### Tech
 - Metal Shader (Graphic)
 - SceneKit (Scene Graph)
-     
-### Source
+
+
+### Source Project
 [Unity Volume Rendering](https://github.com/mlavik1/UnityVolumeRendering)
-    
+
+
+## How To Run in your Local 
+   
+### At First,
+You should set git-lfs setting.   
+Because raw data file is so bigger than supported in git.
+
+install git-lfs first,
+```
+brew install git-lfs
+```
+
+and set git lfs on in your local
+```
+git-lfs install
+```
+
+and pull lfs from server
+```
+git lfs pull
+``` 
+       
 ### Screenshot
 
 |surface rendring|direct volume rendering|maximum intensity projection|
