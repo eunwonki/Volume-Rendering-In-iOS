@@ -2,7 +2,8 @@ import SceneKit
 import SwiftUI
 
 class VolumeCubeMaterial: SCNMaterial {
-    enum Preset: String {
+    enum Preset: String, CaseIterable, Identifiable {
+        var id: RawValue { rawValue }
         case ct_arteries, ct_entire, ct_lung
     }
 
@@ -24,15 +25,13 @@ class VolumeCubeMaterial: SCNMaterial {
         var voxelMaxValue: Int32 = 3071
     }
     
-    let preset: Preset = .ct_arteries
     var uniform = Uniforms()
-    var textureGenerator: VolumeTextureFactory
+    var textureGenerator: VolumeTextureFactory!
+    var tf: TransferFunction?
     
     var scale: float3 { textureGenerator.scale }
     
-    init(device: MTLDevice, part: BodyPart) {
-        textureGenerator = VolumeTextureFactory(part)
-        
+    init(device: MTLDevice) {
         super.init()
         
         let program = SCNProgram()
@@ -40,14 +39,10 @@ class VolumeCubeMaterial: SCNMaterial {
         program.fragmentFunctionName = "volume_fragment"
         self.program = program
         
-        let tProperty = SCNMaterialProperty(contents: textureGenerator.generate(device: device) as Any)
-        setValue(tProperty, forKey: "dicom")
+        setPart(device: device, part: .none)
         
-        let url = Bundle.main.url(forResource: preset.rawValue, withExtension: "tf")!
-        let tf = TransferFunction.load(from: url)
-        let tfTexture = tf.get(device: device)
-        let tfProperty = SCNMaterialProperty(contents: tfTexture)
-        setValue(tfProperty, forKey: "transferColor")
+        setPreset(device: device, preset: .ct_arteries)
+        setShift(device: device, shift: 0)
         
         let buffer = NSData(bytes: &uniform, length: Uniforms.size)
         setValue(buffer, forKey: "uniforms")
@@ -59,5 +54,37 @@ class VolumeCubeMaterial: SCNMaterial {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setPart(device: MTLDevice, part: BodyPart) {
+        textureGenerator = VolumeTextureFactory(part)
+        
+        let tProperty = SCNMaterialProperty(contents: textureGenerator.generate(device: device) as Any)
+        setValue(tProperty, forKey: "dicom")
+    }
+    
+    func setPreset(device: MTLDevice, preset: Preset) {
+        let url = Bundle.main.url(forResource: preset.rawValue, withExtension: "tf")!
+        tf = TransferFunction.load(from: url)
+    }
+    
+    func setLighting(on: Bool) {
+        uniform.isLightingOn = on
+        let buffer = NSData(bytes: &uniform, length: Uniforms.size)
+        setValue(buffer, forKey: "uniforms")
+    }
+    
+    func setStep(step: Float) {
+        uniform.renderingQuality = Int32(step)
+        let buffer = NSData(bytes: &uniform, length: Uniforms.size)
+        setValue(buffer, forKey: "uniforms")
+    }
+    
+    func setShift(device: MTLDevice, shift: Float) {
+        tf?.shift = shift
+        guard let tf = tf else { return }
+        let tfTexture = tf.get(device: device)
+        let tfProperty = SCNMaterialProperty(contents: tfTexture)
+        setValue(tfProperty, forKey: "transferColor")
     }
 }

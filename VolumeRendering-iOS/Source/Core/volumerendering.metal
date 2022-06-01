@@ -139,11 +139,11 @@ direct_volume_rendering(VertexOut in,
         float density = Util::normalize(hu, minValue, maxValue);
         
         float4 src = transferColor.sample(sampler, float2(density, 0));
-//#ifdef LightingOn
-        float3 gradient = Util::calGradient(dicom, sampler, currPos);
-        float3 normal = normalize(gradient);
-        src.rgb = Util::calculateLighting(src.rgb, normal, lightDir, rayDir, 0.3);
-//#endif
+        if (isLightingOn) {
+            float3 gradient = Util::calGradient(dicom, sampler, currPos);
+            float3 normal = normalize(gradient);
+            src.rgb = Util::calculateLighting(src.rgb, normal, lightDir, rayDir, 0.3);
+        }
         
         if (density < 0.1)
             src.a = 0;
@@ -178,9 +178,13 @@ volume_fragment(VertexOut in [[ stage_in ]],
     switch (uniforms.method)
     {
         case 0:
-            return surface_rendering(in, scn_frame, scn_node, quality, dicom, transferColor);
+            return surface_rendering(in, scn_frame, scn_node,
+                                     quality,
+                                     dicom, transferColor);
         default:
-            return direct_volume_rendering(in, scn_frame, scn_node, quality, minValue, maxValue, isLightingOn ,dicom, transferColor);
+            return direct_volume_rendering(in, scn_frame, scn_node,
+                                           quality, minValue, maxValue, isLightingOn,
+                                           dicom, transferColor);
     }
 }
 

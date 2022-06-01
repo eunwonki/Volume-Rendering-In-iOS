@@ -36,13 +36,18 @@ class VolumeTextureFactory {
         dimension = int3(1, 1, 1)
     }
     
-    func generate(device: MTLDevice) -> MTLTexture?
+    func generate(device: MTLDevice) -> MTLTexture
     {
         // example data type specification
         // type: Int16
         // size: dimension.x * dimension.y * dimension.z
         
-        if part == .none { return nil }
+        let descriptor = MTLTextureDescriptor()
+        descriptor.textureType = .type3D
+        descriptor.pixelFormat = .r16Sint
+        descriptor.usage = .shaderRead
+        
+        if part == .none { return device.makeTexture(descriptor: descriptor)! }
         
         let filename = part.rawValue
         let url = Bundle.main.url(forResource: filename, withExtension: "raw.zip")!
@@ -54,13 +59,9 @@ class VolumeTextureFactory {
             }
         }
         
-        let descriptor = MTLTextureDescriptor()
-        descriptor.textureType = .type3D
-        descriptor.pixelFormat = .r16Sint
         descriptor.width = Int(dimension.x)
         descriptor.height = Int(dimension.y)
         descriptor.depth = Int(dimension.z)
-        descriptor.usage = .shaderRead
         
         let bytesPerRow = MemoryLayout<Int16>.size * descriptor.width
         let bytesPerImage = bytesPerRow * descriptor.height
