@@ -23,6 +23,7 @@ struct ContentView: View {
 
 struct DrawOptionView: View {
     @State var part = VolumeCubeMaterial.BodyPart.none
+    @State var method = VolumeCubeMaterial.Method.dvr
     @State var preset = VolumeCubeMaterial.Preset.ct_arteries
     @State var lightingOn: Bool = true
     @State var step: Float = 512
@@ -30,6 +31,25 @@ struct DrawOptionView: View {
     
     var body: some View {
         VStack {
+            HStack {
+                Picker("Choose a method", selection: $method) {
+                    ForEach(VolumeCubeMaterial.Method.allCases, id: \.self) { part in
+                        Text(part.rawValue)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                .onChange(of: method) {
+                    SceneViewController.Instance.setMethod(method: $0)
+                }
+                .foregroundColor(.orange)
+                .onAppear() {
+                    UISegmentedControl.appearance().selectedSegmentTintColor = .blue
+                    UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+                    UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.blue], for: .normal)
+                }
+            }
+            
             HStack {
                 Picker("Choose a Part", selection: $part) {
                     ForEach(VolumeCubeMaterial.BodyPart.allCases, id: \.self) { part in

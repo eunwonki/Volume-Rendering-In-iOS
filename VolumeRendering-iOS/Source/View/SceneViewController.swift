@@ -47,6 +47,10 @@ class SceneViewController: NSObject {
         cameraController.target = volume.boundingSphere.center
     }
     
+    func setMethod(method: VolumeCubeMaterial.Method) {
+        mat.setMethod(method: method)
+    }
+    
     func setPart(part: VolumeCubeMaterial.BodyPart) {
         mat.setPart(device: device, part: part)
         volume.geometry?.materials = [mat]

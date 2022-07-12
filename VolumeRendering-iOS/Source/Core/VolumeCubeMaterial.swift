@@ -7,7 +7,15 @@ class VolumeCubeMaterial: SCNMaterial {
         case ct_arteries, ct_entire, ct_lung
     }
 
-    enum Method: Int32 {
+    enum Method: String, CaseIterable, Identifiable {
+        var id: RawValue { rawValue }
+        var idInt32: Int32 {
+            switch(self) {
+            case .surf: return 0
+            case .dvr: return 1
+            case .mip: return 2
+            }
+        }
         case surf, dvr, mip
     }
 
@@ -18,7 +26,8 @@ class VolumeCubeMaterial: SCNMaterial {
     
     struct Uniforms: sizeable {
         var isLightingOn: Bool = true
-        let method: Int32 = Method.dvr.rawValue
+        var isBackwardOn: Bool = false
+        var method: Int32 = Method.dvr.idInt32
         var renderingQuality: Int32 = 512
         // Int16 type size mismatches in metal shader... so I use Int32.
         var voxelMinValue: Int32 = -1024
@@ -54,6 +63,12 @@ class VolumeCubeMaterial: SCNMaterial {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setMethod(method: Method) {
+        uniform.method = method.idInt32
+        let buffer = NSData(bytes: &uniform, length: Uniforms.size)
+        setValue(buffer, forKey: "uniforms")
     }
     
     func setPart(device: MTLDevice, part: BodyPart) {
