@@ -54,6 +54,7 @@ surface_rendering(VertexOut in,
   SCNSceneBuffer scn_frame,
   NodeBuffer scn_node,
   int quality, short minV, short maxV,
+  bool isLightingOn,
   texture3d<short, access::sample> volume,
   texture2d<float, access::sample> transferColor
 )
@@ -85,7 +86,8 @@ surface_rendering(VertexOut in,
             float3 graident = VR::calGradient(volume, currPos);
             float3 normal = normalize(graident);
             col = VR::getTfColour(transferColor, density);
-            col.rgb = Util::calculateLighting(col.rgb, normal, lightDir, ray.direction, 0.15f);
+            if (isLightingOn)
+                col.rgb = Util::calculateLighting(col.rgb, normal, lightDir, ray.direction, 0.15f);
             col.a = 1;
             break;
         }
@@ -230,6 +232,7 @@ volume_fragment(VertexOut in [[ stage_in ]],
         case 0:
             return surface_rendering(in, scn_frame, scn_node,
                                      quality, minValue, maxValue,
+                                     isLightingOn,
                                      dicom, transferColor);
         case 1:
             return direct_volume_rendering(in, scn_frame, scn_node,

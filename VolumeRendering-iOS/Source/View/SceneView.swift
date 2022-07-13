@@ -11,7 +11,8 @@ struct SceneView: UIViewRepresentable {
         scnView.allowsCameraControl = true
         scnView.autoenablesDefaultLighting = true
         scnView.showsStatistics = true
-        scnView.backgroundColor = .black
+        scnView.backgroundColor = .clear
+        scnView.clearsContextBeforeDrawing = true
         
         scnView.scene = scene        
         return scnView
