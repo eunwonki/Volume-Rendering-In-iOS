@@ -36,10 +36,18 @@ git lfs pull
 
 |surface rendring|direct volume rendering|maximum intensity projection|
 |-|-|-|
-|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/1.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/2.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/3.jpeg?raw=true)|
+|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/6.jpg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/10.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/7.jpeg?raw=true)|
      
        
+       
 #### Direct Volume Rendering    
-|CT-Coronary-Arteries|CT-Lung|
-|- |-|
-|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/5.png?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/4.png?raw=true)|
+|CT-Coronary-Arteries|CT-Chest-Entire|CT-Lung|
+|- |-|-|
+|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/9.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/10.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/12.jpg?raw=true)|
+    
+
+#### Lighting
+|Lighting Off|Lighting On|
+|-|-|
+|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/9.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/8.jpeg?raw=true)|
+![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/10.jpeg?raw=true)|![](https://github.com/eunwonki/Metal-Based-Volume-Rendering-In-iOS/blob/main/Screenshot/11.jpeg?raw=true)|
