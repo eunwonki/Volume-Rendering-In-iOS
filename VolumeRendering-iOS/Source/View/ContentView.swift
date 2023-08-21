@@ -5,6 +5,8 @@ import SwiftUI
 struct ContentView: View {
     var view = SCNView()
     
+    @State var showOption = true
+    
     var body: some View {
         ZStack(alignment: .topLeading) {
             SceneView(scnView: view)
@@ -12,11 +14,16 @@ struct ContentView: View {
                 .onAppear(perform: {
                     SceneViewController.Instance.onAppear(view)
                 })
-            DrawOptionView()
-                .frame(width: 300,
-                       height: 400,
-                       alignment: .topLeading)
-                .background(.clear)
+               
+            HStack(alignment: .top) {
+                Button(showOption ? "hide" : "show") {
+                    showOption.toggle()
+                }
+                
+                if showOption {
+                    DrawOptionView().background(.clear)
+                }
+            }.padding(.vertical, 25)
         }
     }
 }
@@ -30,7 +37,7 @@ struct DrawOptionView: View {
     @State var shift: Float = 0
     
     var body: some View {
-        VStack {
+        VStack (spacing: 10) {
             HStack {
                 Picker("Choose a method", selection: $method) {
                     ForEach(VolumeCubeMaterial.Method.allCases, id: \.self) { part in
@@ -48,7 +55,7 @@ struct DrawOptionView: View {
                     UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
                     UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.blue], for: .normal)
                 }
-            }
+            }.frame(height: 30)
             
             HStack {
                 Picker("Choose a Part", selection: $part) {
@@ -68,7 +75,7 @@ struct DrawOptionView: View {
                     UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
                     UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.blue], for: .normal)
                 }
-            }
+            }.frame(height: 30)
             
             HStack {
                 Picker("Choose a Preset", selection: $preset) {
@@ -88,7 +95,7 @@ struct DrawOptionView: View {
                     UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
                     UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.blue], for: .normal)
                 }
-            }
+            }.frame(height: 30)
             
             HStack {
                 Toggle("Lighting On",
@@ -96,7 +103,7 @@ struct DrawOptionView: View {
                 .foregroundColor(.white)
                 .onChange(of: lightingOn,
                           perform: SceneViewController.Instance.setLighting)
-            }
+            }.frame(height: 30)
             
             HStack {
                 Text("Step")
@@ -105,7 +112,7 @@ struct DrawOptionView: View {
                 Slider(value: $step, in: 128...512, step: 1)
                     .padding()
                     .onChange(of: step, perform: SceneViewController.Instance.setStep)
-            }
+            }.frame(height: 30)
             
             HStack {
                 Text("Shift")
@@ -113,7 +120,9 @@ struct DrawOptionView: View {
                 Slider(value: $shift, in: -100...100, step: 1)
                     .padding()
                     .onChange(of: shift, perform: SceneViewController.Instance.setShift)
-            }
+            }.frame(height: 30)
+            
+            Spacer()
         }
     }
 }
