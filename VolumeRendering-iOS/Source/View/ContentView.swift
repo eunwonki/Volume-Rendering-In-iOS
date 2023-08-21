@@ -6,6 +6,7 @@ struct ContentView: View {
     var view = SCNView()
     
     @State var showOption = true
+    @StateObject var model = DrawOptionModel()
     
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -21,32 +22,37 @@ struct ContentView: View {
                 }
                 
                 if showOption {
-                    DrawOptionView().background(.clear)
+                    DrawOptionView(
+                        model: model).background(.clear)
                 }
             }.padding(.vertical, 25)
         }
     }
 }
 
+class DrawOptionModel: ObservableObject {
+    @Published var part = VolumeCubeMaterial.BodyPart.none
+    @Published var method = VolumeCubeMaterial.Method.dvr
+    @Published var preset = VolumeCubeMaterial.Preset.ct_arteries
+    @Published var lightingOn: Bool = true
+    @Published var step: Float = 512
+    @Published var shift: Float = 0
+}
+
 struct DrawOptionView: View {
-    @State var part = VolumeCubeMaterial.BodyPart.none
-    @State var method = VolumeCubeMaterial.Method.dvr
-    @State var preset = VolumeCubeMaterial.Preset.ct_arteries
-    @State var lightingOn: Bool = true
-    @State var step: Float = 512
-    @State var shift: Float = 0
+    @ObservedObject var model: DrawOptionModel
     
     var body: some View {
         VStack (spacing: 10) {
             HStack {
-                Picker("Choose a method", selection: $method) {
+                Picker("Choose a method", selection: $model.method) {
                     ForEach(VolumeCubeMaterial.Method.allCases, id: \.self) { part in
                         Text(part.rawValue)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                .onChange(of: method) {
+                .onChange(of: model.method) {
                     SceneViewController.Instance.setMethod(method: $0)
                 }
                 .foregroundColor(.orange)
@@ -58,16 +64,16 @@ struct DrawOptionView: View {
             }.frame(height: 30)
             
             HStack {
-                Picker("Choose a Part", selection: $part) {
+                Picker("Choose a Part", selection: $model.part) {
                     ForEach(VolumeCubeMaterial.BodyPart.allCases, id: \.self) { part in
                         Text(part.rawValue)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                .onChange(of: part) {
+                .onChange(of: model.part) {
                     SceneViewController.Instance.setPart(part: $0)
-                    shift = 0
+                    model.shift = 0
                 }
                 .foregroundColor(.orange)
                 .onAppear() {
@@ -78,16 +84,16 @@ struct DrawOptionView: View {
             }.frame(height: 30)
             
             HStack {
-                Picker("Choose a Preset", selection: $preset) {
+                Picker("Choose a Preset", selection: $model.preset) {
                     ForEach(VolumeCubeMaterial.Preset.allCases, id: \.self) { part in
                         Text(part.rawValue)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding()
-                .onChange(of: preset) {
+                .onChange(of: model.preset) {
                     SceneViewController.Instance.setPreset(preset: $0)
-                    shift = 0
+                    model.shift = 0
                 }
                 .foregroundColor(.orange)
                 .onAppear() {
@@ -99,9 +105,9 @@ struct DrawOptionView: View {
             
             HStack {
                 Toggle("Lighting On",
-                       isOn: $lightingOn)
+                       isOn: $model.lightingOn)
                 .foregroundColor(.white)
-                .onChange(of: lightingOn,
+                .onChange(of: model.lightingOn,
                           perform: SceneViewController.Instance.setLighting)
             }.frame(height: 30)
             
@@ -109,17 +115,17 @@ struct DrawOptionView: View {
                 Text("Step")
                     .foregroundColor(.white)
                 
-                Slider(value: $step, in: 128...512, step: 1)
+                Slider(value: $model.step, in: 128...512, step: 1)
                     .padding()
-                    .onChange(of: step, perform: SceneViewController.Instance.setStep)
+                    .onChange(of: model.step, perform: SceneViewController.Instance.setStep)
             }.frame(height: 30)
             
             HStack {
                 Text("Shift")
                     .foregroundColor(.white)
-                Slider(value: $shift, in: -100...100, step: 1)
+                Slider(value: $model.shift, in: -100...100, step: 1)
                     .padding()
-                    .onChange(of: shift, perform: SceneViewController.Instance.setShift)
+                    .onChange(of: model.shift, perform: SceneViewController.Instance.setShift)
             }.frame(height: 30)
             
             Spacer()
